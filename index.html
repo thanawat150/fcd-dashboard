@@ -1,5 +1,29 @@
-<meta name="dash-one-writer">
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>สรุปเนื้อที่ FCD</title>
 <style>
+:root {
+  --color-bg: #f7f7f7; --color-panel: #fff; --color-fg: #191919;
+  --color-fg-muted: #626262; --color-border-line: #e5e5e5;
+  --font-anthropic-sans: system-ui, Tahoma, sans-serif;
+  --font-anthropic-serif: var(--font-anthropic-sans);
+  --cds-font-size-body: .875rem; --cds-font-size-caption: .8rem;
+  --cds-font-size-heading: 1rem; --cds-font-size-title: 1.65rem;
+  --cds-font-weight-medium: 600; --cds-radius: .5rem;
+  --cds-gap-xs: .3rem; --cds-gap-sm: .55rem; --cds-gap-md: 1rem; --cds-gap-xl: 2.5rem;
+  --cds-pad-xs: .3rem; --cds-pad-sm: .55rem; --cds-pad-md: .75rem; --cds-pad-lg: 1rem;
+  --cds-border: var(--color-border-line); --cds-text-secondary: var(--color-fg-muted);
+  --cds-surface-popover: var(--color-panel); --cds-shadow-popover: 0 4px 16px #0002;
+  --cds-dur-slow: 180ms; --cds-ease-out: ease-out;
+}
+*, *::before, *::after { box-sizing: border-box; }
+body { margin: 0; background: var(--color-bg); color: var(--color-fg); font: .875rem/1.5 var(--font-anthropic-sans); }
+#dash-root { max-width: 90rem; margin-inline: auto; padding: 1rem; }
+.dash-select { font: inherit; color: inherit; background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: .35rem .65rem; }
+[hidden] { display: none !important; }
 #dash-root .fcd { display: flex; flex-direction: column; gap: var(--cds-gap-xl); font-family: var(--font-anthropic-sans);
   --lv-high: #3f9a4a; --lv-mid: #dfae1c; --lv-low: #d6452f; --lv-none: #9b9b9b; }
 .fcd b { font-weight: var(--cds-font-weight-medium); }
@@ -91,7 +115,11 @@
 @media (max-width: 30rem) { .hrow { grid-template-columns: 4.5rem minmax(0, 1fr) 4.5rem; } .fcd .hide-sm { display: none; } }
 [data-dash-source-state=refreshing] { opacity: .5; transition: opacity var(--cds-dur-slow); }
 </style>
-
+</head>
+<body>
+<main id="dash-root" aria-busy="true">
+<p id="data-status" role="status">กำลังโหลดข้อมูล FCD…</p>
+<noscript>เปิด JavaScript เพื่อแสดงข้อมูลและแผนที่ FCD</noscript>
 <div class="fcd">
   <header class="fcd-head">
     <h1 class="fcd-title">สรุปเนื้อที่ FCD</h1>
@@ -271,15 +299,67 @@
     </dl>
   </details>
 </div>
+</main>
 
 <script>
+  // Connect the existing renderers to the static CSV files.
+  const sources = new Map();
+  const renderers = new Map();
+  const calculations = new Map();
+  const dash = {
+    calc(name, spec) { calculations.set(name, spec); },
+    data(name) { return sources.get(name) ?? { status: 'loading' }; },
+    draw(name, render) {
+      if (render) {
+        renderers.set(name, render);
+        return;
+      }
+      document.querySelectorAll(`[data-draw="${name}"]`).forEach(renderers.get(name));
+    },
+  };
+
+  async function loadCsv(path) {
+    const response = await fetch(path);
+    if (!response.ok) throw new Error(`${path}: HTTP ${response.status}`);
+    const csv = (await response.text()).replace(/^\uFEFF/, '');
+    const rows = [[]];
+    for (const [, quoted, plain, separator] of (csv + '\n').matchAll(/(?:"((?:[^"]|"")*)"|([^",\r\n]*))(,|\r\n|\n|\r)/g)) {
+      rows.at(-1).push(quoted === undefined ? plain : quoted.replace(/""/g, '"'));
+      if (separator !== ',') rows.push([]);
+    }
+    const fields = rows.shift();
+    return rows.filter((row) => row.some(Boolean)).map((row) => {
+      if (row.length !== fields.length) throw new Error(`Invalid CSV row in ${path}`);
+      return Object.fromEntries(fields.map((field, index) => [field, row[index]]));
+    });
+  }
+
+  async function startDashboard() {
+    const status = document.getElementById('data-status');
+    try {
+      const [fcd, baseline] = await Promise.all([loadCsv('fcd_dashboard.csv'), loadCsv('baseline.csv')]);
+      sources.set('fcd', { status: 'ok', data: fcd });
+      sources.set('baseline', { status: 'ok', data: baseline });
+      calculations.forEach(({ inputs, fn }, name) => {
+        sources.set(name, { status: 'ok', data: fn(...inputs.map((input) => dash.data(input).data)) });
+      });
+      renderers.forEach((_, name) => dash.draw(name));
+      status.hidden = true;
+    } catch (error) {
+      status.textContent = 'โหลดข้อมูล FCD ไม่สำเร็จ กรุณาเปิดผ่านลิงก์เว็บไซต์แล้วลองใหม่';
+      console.error(error);
+    } finally {
+      document.getElementById('dash-root').setAttribute('aria-busy', 'false');
+    }
+  }
+
   const F = window.FCD = window.FCD || {};
   F.state = { scope: 'all', mode: 'rai', sort: 'total', tKey: 'total', tDir: -1, q: '' };
   F.LV = [['high', 'มาก'], ['mid', 'ปานกลาง'], ['low', 'น้อย'], ['none', 'ไม่ระบุระดับ']];
   F.n = (v) => +v || 0;
-  F.rai = d3.format(',.2f');
-  F.int = d3.format(',');
-  F.pct = d3.format('.1%');
+  F.rai = new Intl.NumberFormat('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format;
+  F.int = new Intl.NumberFormat('en').format;
+  F.pct = new Intl.NumberFormat('en', { style: 'percent', minimumFractionDigits: 1, maximumFractionDigits: 1 }).format;
   F.plotNum = (p) => { const m = String(p).match(/^(\d+)(?:\((\d+)\))?/); return m ? (+m[1]) * 100 + (+(m[2] || 0)) : 1e9; };
   F.inScope = (r) => {
     const s = F.state.scope;
@@ -303,7 +383,7 @@
     el.addEventListener('click', fn);
     el.addEventListener('keydown', (ev) => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); fn(); } });
   };
-  F.state.plot = null;
+  F.state.plot = '73-STC';
   F.curPlot = () => {
     const rs = F.rows();
     if (!rs || !rs.length) return null;
@@ -426,7 +506,7 @@
     t.style.left = x + 'px'; t.style.top = y + 'px';
   };
   F.bars = (el, items, mode, onPick) => {
-    const max = d3.max(items, (d) => d.total) || 1;
+    const max = Math.max(0, ...items.map((d) => d.total)) || 1;
     const rows = items.map((d) => {
       const row = document.createElement('div'); row.className = 'hrow';
       const lb = document.createElement('div'); lb.className = 'lb'; lb.textContent = d.label;
@@ -456,7 +536,11 @@
     const rs = F.rows();
     el.classList.toggle('dash-skeleton', dash.data('fcd').status === 'loading');
     if (!rs) { el.textContent = '—'; return; }
-    const m = d3.group(rs, (r) => r.province);
+    const m = new Map();
+    rs.forEach((r) => {
+      if (!m.has(r.province)) m.set(r.province, []);
+      m.get(r.province).push(r);
+    });
     const items = [...m].map(([p, g]) => Object.assign(F.agg(g), { label: p, title: `${p} · ${g.length} แปลง` })).sort((a, b) => b.total - a.total);
     F.bars(el, items, 'rai', F.state.scope.startsWith('p:') ? null : (d) => F.setScope('p:' + d.label));
   });
@@ -673,4 +757,7 @@
     F.state.q = inp.value;
     dash.draw('table'); dash.draw('tcount');
   }));
+  startDashboard();
 </script>
+</body>
+</html>
