@@ -49,7 +49,7 @@ plot,province,ptype,book,high,mid,low,none,total,water,boundary,note,baseline_n,
 96-STC,สมุทรสงคราม,STC,Standard MOC2 STC,3.56,1.50,0.09,0.00,5.15,0.00,5.15,,0,maps/96-STC.jpg,fcd
 97-STC,สมุทรสงคราม,STC,Standard MOC2 STC,13.46,2.33,0.17,0.00,15.96,0.00,15.96,,0,maps/97-STC.jpg,fcd
 98-STC,สมุทรสงคราม,STC,Standard MOC2 STC,1.34,1.63,0.62,0.00,3.59,0.00,3.59,,0,maps/98-STC.jpg,fcd
-18-VSD,ชุมพร,VSD,Standard MOC2 STC&VSD,1225.33,621.76,62.68,0.00,1909.77,97.99,1909.77,ไม่มีไฟล์ขอบเขต 'ใช้งาน' ของแปลงนี้,10,maps_baseline/18-VSD.jpg,baseline
+18-VSD,ชุมพร,VSD,Standard MOC2 STC&VSD,1172.15,553.26,58.42,0.00,1783.83,0.30,1909.77,ขอบเขตจาก 18-VSD PDD cut.kml · ภายในขอบเขตมี 125.94 ไร่ที่ไม่มีค่าระดับเรือนยอด (รวมแหล่งน้ำ 0.30 ไร่),10,maps_baseline/18-VSD.jpg,baseline
 19(1)-VSD,ชุมพร,VSD,Standard MOC3 STC&VSD,403.32,250.89,31.98,0.00,686.19,0.00,688.93,FCD (ไม่รวมแหล่งน้ำ) อยู่นอกขอบเขต 0.45 ไร่,0,maps/19%281%29-VSD.jpg,fcd
 19-VSD,ชุมพร,VSD,Standard MOC2 STC&VSD,54.97,120.05,141.36,0.00,316.38,7.75,316.38,ไม่มีไฟล์ขอบเขต 'ใช้งาน' ของแปลงนี้,2,maps_baseline/19-VSD.jpg,baseline
 40-VSD,พังงา,VSD,Standard MOC2 STC&VSD,230.39,41.28,4.42,1.24,277.33,11.78,277.33,ไม่มีไฟล์ขอบเขต 'ใช้งาน' ของแปลงนี้,1,maps_baseline/40-VSD.jpg,baseline
