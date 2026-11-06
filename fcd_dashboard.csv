@@ -1,0 +1,76 @@
+plot,province,ptype,book,high,mid,low,none,total,water,boundary,note,baseline_n,map,map_kind
+38-STC,กระบี่,STC,Standard MOC2 STC,23.43,9.92,1.22,0.00,34.57,0.00,34.57,,0,/_blob/7ec8f67e2115257cdea58a903f5f3cd3,fcd
+39-STC,กระบี่,STC,Standard MOC2 STC,32.47,64.02,3.38,0.00,99.87,0.00,100.01,,0,/_blob/ab13a587b3ba758efab3d78bd189a42d,fcd
+40-STC,กระบี่,STC,Standard MOC2 STC,29.96,18.50,1.23,0.00,49.69,0.00,49.69,,0,/_blob/6defc519a7ce994fb27b903b64e1ccc2,fcd
+41-STC,กระบี่,STC,Standard MOC2 STC,72.14,33.75,0.00,0.00,105.89,0.00,105.91,,0,/_blob/43b7f2d6cc7aafa0559d706d05cf11d0,fcd
+42-STC,กระบี่,STC,Standard MOC2 STC,6.21,4.10,0.09,0.00,10.40,0.00,10.40,,0,/_blob/ea8b7d837bd072c87503bda865d0f455,fcd
+43-STC,กระบี่,STC,Standard MOC2 STC,16.97,9.00,0.00,0.00,25.97,0.00,25.97,,0,/_blob/c6e37e46af72d510c4cccca500c15ca2,fcd
+44-STC,กระบี่,STC,Standard MOC2 STC,46.86,6.24,2.73,0.00,55.83,0.00,55.84,,0,/_blob/ae32cd000010bf4c5817df3df69bf894,fcd
+45-STC,กระบี่,STC,Standard MOC2 STC,12.59,30.32,2.15,0.00,45.06,0.00,45.06,,0,/_blob/0a97de268a3c3d66670f0d33ea139a7e,fcd
+46-STC,กระบี่,STC,Standard MOC2 STC,24.95,33.27,0.75,0.00,58.97,0.00,71.26,,0,/_blob/a15d5869d3e958f87b40a7e1bdee8935,fcd
+47-STC,กระบี่,STC,Standard MOC2 STC,37.89,4.65,0.64,0.00,43.18,0.00,50.48,,0,/_blob/656a52fe848c1f5ee6364ef7db76b403,fcd
+48-STC,กระบี่,STC,Standard MOC2 STC,39.16,5.38,0.00,0.00,44.54,0.00,46.15,,0,/_blob/9bcdc0a194dbe92fc6b0095146d567bc,fcd
+49-STC,กระบี่,STC,Standard MOC2 STC,13.41,17.33,6.30,0.00,37.04,0.00,37.04,,0,/_blob/d2362db015b14977e095b61b8742f97a,fcd
+50-STC,กระบี่,STC,Standard MOC2 STC,88.12,16.21,3.68,0.00,108.01,0.00,108.03,,1,/_blob/b5116df8181b2ab2f472176d8bae22c3,baseline
+51-STC,กระบี่,STC,Standard MOC2 STC,80.71,30.91,0.00,0.00,111.62,0.00,173.16,,0,/_blob/8c54f0d035a16dde1b124b8f735b17d7,fcd
+52-STC,กระบี่,STC,Standard MOC2 STC,72.84,5.39,0.00,0.00,78.23,0.00,106.80,,0,/_blob/bdb2e1bccbd77f3f95aa56f4d823f972,fcd
+53-STC,กระบี่,STC,Standard MOC2 STC,20.21,7.01,0.11,0.00,27.33,0.00,42.45,,0,/_blob/cfc717ea2bcec2a8afae6c76a4e2f656,fcd
+54-STC,กระบี่,STC,Standard MOC2 STC,66.74,4.55,0.47,0.00,71.76,0.00,71.76,,0,/_blob/9a2cdd3a42457f4d1212e0c6548d85a0,fcd
+55-STC,กระบี่,STC,Standard MOC2 STC,40.52,5.50,0.00,0.00,46.02,0.00,47.21,,0,/_blob/b9e365a72ddc72b6483e49e081b34944,fcd
+59-STC,กระบี่,STC,Standard MOC2 STC,270.00,156.85,41.53,0.00,468.38,0.00,468.39,,0,/_blob/4b07487d3a3e9714bdf487c810b34c04,fcd
+62-STC,กระบี่,STC,Standard MOC2 STC,0.26,15.18,50.49,0.00,65.93,0.00,65.93,,0,/_blob/beb2805fda9ccc191c6b952033dfe872,fcd
+63-STC,กระบี่,STC,Standard MOC2 STC,0.66,16.04,38.81,0.00,55.51,0.00,55.53,,0,/_blob/dac73cf22e03a250f86dbe14a2a92921,fcd
+64-STC,กระบี่,STC,Standard MOC2 STC,0.09,6.03,5.99,0.00,12.11,0.00,12.14,,0,/_blob/7b0ade0b690e2690be93829f05d1175d,fcd
+65-STC,กระบี่,STC,Standard MOC2 STC,0.39,13.47,41.72,0.00,55.58,0.00,60.99,,0,/_blob/59c0e12c067d0eef66f8c6213ad13514,fcd
+67-STC,พังงา,STC,Standard MOC2 STC,348.92,22.83,0.03,0.00,371.78,0.00,377.26,,0,/_blob/ba1b21d996858da8a1eca4bf04a93dcc,fcd
+68-STC,พังงา,STC,Standard MOC2 STC,9.49,11.81,15.82,0.00,37.12,0.00,50.43,,0,/_blob/4be6386f3e01c14493c8755545b6ca04,fcd
+69-STC,พังงา,STC,Standard MOC2 STC,4.50,14.01,18.13,0.00,36.64,0.00,75.89,,0,/_blob/3954e5dc15291158af2e8970135c4a65,fcd
+70-STC,พังงา,STC,Standard MOC2 STC,128.37,7.09,0.23,0.00,135.69,0.00,136.31,,1,/_blob/c89565bb6fe67bc74ca2e3e6b6850308,baseline
+71-STC,พังงา,STC,Standard MOC2 STC,63.23,7.68,0.55,0.00,71.46,0.00,72.17,,1,/_blob/05528dcace407fd9348032ddb4c8b695,baseline
+72-STC,พังงา,STC,Standard MOC2 STC,941.47,70.99,3.59,0.00,1016.05,0.00,1017.01,,1,/_blob/aa481c49efb9e1e3d8746c2ae4a30dbb,baseline
+73-STC,พังงา,STC,Standard MOC2 STC,453.52,28.93,1.47,0.00,483.92,0.00,484.41,,1,/_blob/472683a842cba252d09ab12a88f92024,baseline
+74-STC,พังงา,STC,Standard MOC2 STC,26.19,71.71,5.96,0.00,103.86,0.00,104.32,,1,/_blob/7ff796c7a6a0daf5074deefd818ab7ad,baseline
+75-STC,พังงา,STC,Standard MOC2 STC,95.75,335.95,4.88,0.00,436.58,0.00,438.64,,3,/_blob/9e46ba703dff23b70e6dc874be364056,baseline
+76-STC,พังงา,STC,Standard MOC2 STC,21.60,80.24,3.94,0.00,105.78,0.00,106.01,,0,/_blob/05634d7cf5b4b53f682458c37d8d5af6,fcd
+77-STC,พังงา,STC,Standard MOC2 STC,10.45,41.17,0.23,0.00,51.85,0.00,52.11,,0,/_blob/2d5b8cc013f24c6e54334d9ab7338620,fcd
+78-STC,ภูเก็ต,STC,Standard MOC2 STC,21.47,4.28,0.00,0.00,25.75,0.00,26.31,,0,/_blob/100fd9bcbbaf469119e8f55df7c246c4,fcd
+79-STC,ภูเก็ต,STC,Standard MOC2 STC,11.75,22.18,9.82,0.56,44.31,0.00,50.74,,0,/_blob/879693de63a5721838f7f3aa0086040a,fcd
+80-STC,ภูเก็ต,STC,Standard MOC2 STC,13.60,40.51,12.12,0.00,66.23,0.00,70.81,,4,/_blob/75670bff35a162a71d5d8cfcedb11dac,baseline
+81-STC,ระนอง,STC,Standard MOC2 STC,385.69,230.06,43.37,0.00,659.12,0.00,666.56,,3,/_blob/e43dd2786dfeb4f4dd8e0cc6ff710f14,baseline
+88-STC,สตูล,STC,Standard MOC2 STC,251.49,178.78,6.91,0.00,437.18,0.00,438.58,,1,/_blob/5cbb85101890f3ad4b76a21b069f4689,baseline
+89-STC,สตูล,STC,Standard MOC2 STC,90.72,76.03,1.17,0.00,167.92,0.00,168.80,,2,/_blob/78f298fcd3aaaab34e8ed5870021387d,baseline
+90(1)-STC,สตูล,STC,Standard MOC2 STC,315.34,102.41,6.94,0.00,424.69,0.00,425.30,,1,/_blob/a010faffae2a3a46c79be994b0d0f2fd,baseline
+90-STC,สตูล,STC,Standard MOC2 STC,1674.74,169.63,15.63,0.00,1860.00,0.00,1863.46,,1,/_blob/b3d982ec484770562bd5c9100d8a1500,baseline
+91-STC,สมุทรสงคราม,STC,Standard MOC2 STC,119.62,159.05,0.77,0.00,279.44,0.00,279.43,,3,/_blob/fdc2744dcdc03db92d90e272c5945fd1,baseline
+92-STC,สมุทรสงคราม,STC,Standard MOC2 STC,88.76,9.42,0.75,0.00,98.93,0.00,98.94,,1,/_blob/15e3ac1f9e59008c623cd0267d195b3d,baseline
+93-STC,สมุทรสงคราม,STC,Standard MOC2 STC,69.73,7.82,1.47,0.00,79.02,0.00,79.02,,1,/_blob/6db24d401c799710bfe5d9b0a590e41e,baseline
+94-STC,สมุทรสงคราม,STC,Standard MOC2 STC,24.57,4.76,1.31,0.00,30.64,0.00,30.66,,1,/_blob/9555a2ba78a59895817ae0bfaad54576,baseline
+95-STC,สมุทรสงคราม,STC,Standard MOC2 STC,15.46,6.97,0.48,0.00,22.91,0.00,22.91,,0,/_blob/469f462bd7de5df455bf05844a3626e9,fcd
+96-STC,สมุทรสงคราม,STC,Standard MOC2 STC,3.56,1.50,0.09,0.00,5.15,0.00,5.15,,0,/_blob/0302174a8b7c745f7c6275b3ba07839e,fcd
+97-STC,สมุทรสงคราม,STC,Standard MOC2 STC,13.46,2.33,0.17,0.00,15.96,0.00,15.96,,0,/_blob/a514053415ef39267fc6090f72065469,fcd
+98-STC,สมุทรสงคราม,STC,Standard MOC2 STC,1.34,1.63,0.62,0.00,3.59,0.00,3.59,,0,/_blob/372b92a54a5b39468ca92a0ddbc19349,fcd
+18-VSD,ชุมพร,VSD,Standard MOC2 STC&VSD,1225.33,621.76,62.68,0.00,1909.77,97.99,1909.77,ไม่มีไฟล์ขอบเขต 'ใช้งาน' ของแปลงนี้,10,/_blob/43c19a21f58099d06b6f11bba6c383f0,baseline
+19(1)-VSD,ชุมพร,VSD,Standard MOC3 STC&VSD,403.32,250.89,31.98,0.00,686.19,0.00,688.93,FCD (ไม่รวมแหล่งน้ำ) อยู่นอกขอบเขต 0.45 ไร่,0,/_blob/c20c5e2da250f5e7fbef257839a4ca33,fcd
+19-VSD,ชุมพร,VSD,Standard MOC2 STC&VSD,54.97,120.05,141.36,0.00,316.38,7.75,316.38,ไม่มีไฟล์ขอบเขต 'ใช้งาน' ของแปลงนี้,2,/_blob/4e546e3d425262f76891eb6c8b92658e,baseline
+40-VSD,พังงา,VSD,Standard MOC2 STC&VSD,230.39,41.28,4.42,1.24,277.33,11.78,277.33,ไม่มีไฟล์ขอบเขต 'ใช้งาน' ของแปลงนี้,1,/_blob/2026b52f543668a01a35df12add1213f,baseline
+41-VSD,พังงา,VSD,Standard MOC2 STC&VSD,165.72,11.74,1.11,0.35,178.92,2.58,178.92,ไม่มีไฟล์ขอบเขต 'ใช้งาน' ของแปลงนี้,0,/_blob/b8dab1f2815084dd231d8650c0965682,fcd
+42-VSD,พังงา,VSD,Standard MOC2 STC&VSD,209.29,11.28,1.50,0.94,223.01,5.87,223.01,ไม่มีไฟล์ขอบเขต 'ใช้งาน' ของแปลงนี้,1,/_blob/50bb817310f9d71525d97718bc8258e5,baseline
+43-VSD,พังงา,VSD,Standard MOC2 STC&VSD,0.00,121.41,1.28,0.13,122.82,1.09,122.82,ไม่มีไฟล์ขอบเขต 'ใช้งาน' ของแปลงนี้,1,/_blob/82ae6e179351d7c2f78b51287220427e,baseline
+44-VSD,พังงา,VSD,Standard MOC2 STC&VSD,171.28,48.30,1.00,0.49,221.07,2.42,221.07,ไม่มีไฟล์ขอบเขต 'ใช้งาน' ของแปลงนี้,1,/_blob/99f77522299a9fec2cc5cd1269b9e5fe,baseline
+66-VSD,ตรัง,VSD,Standard MOC2 STC&VSD,5.42,44.57,47.05,0.13,97.17,0.00,97.17,ไม่มีไฟล์ขอบเขต 'ใช้งาน' ของแปลงนี้,2,/_blob/b1c7b6edbac700d583e30200859bc51b,baseline
+85-VSD,สตูล,VSD,Standard MOC2 STC&VSD,435.45,148.05,12.76,3.33,599.59,8.00,599.58,ไม่มีไฟล์ขอบเขต 'ใช้งาน' ของแปลงนี้,2,/_blob/7f57a226ca8a36c0f5d27af11b60272e,baseline
+86-VSD,สตูล,VSD,Standard MOC2 STC&VSD,986.58,135.67,13.65,6.06,1141.96,20.51,1141.96,ไม่มีไฟล์ขอบเขต 'ใช้งาน' ของแปลงนี้,3,/_blob/5c961f9fca13fc7c4daee84b5a975b53,baseline
+87-VSD,สมุทรสงคราม,VSD,Standard MOC2 STC&VSD,78.88,11.52,1.86,0.66,92.92,8.70,92.92,ไม่มีไฟล์ขอบเขต 'ใช้งาน' ของแปลงนี้,1,/_blob/e7bafbf8dace95bd0dd5652c8cce3e6f,baseline
+88-VSD,ปัตตานี,VSD,Standard MOC2 STC&VSD,54.92,163.77,38.23,0.74,257.66,0.00,257.65,ไม่มีไฟล์ขอบเขต 'ใช้งาน' ของแปลงนี้,0,/_blob/c5a55ed9c34dc05b0b4324430d924cf6,fcd
+89-VSD,ปัตตานี,VSD,Standard MOC2 STC&VSD,22.27,3.33,0.00,0.12,25.72,0.00,25.72,ไม่มีไฟล์ขอบเขต 'ใช้งาน' ของแปลงนี้,0,/_blob/63095e207955fab66df3fcdda530d3a1,fcd
+90-VSD,ปัตตานี,VSD,Standard MOC2 STC&VSD,12.57,8.67,0.86,0.32,22.42,38.23,22.42,ไม่มีไฟล์ขอบเขต 'ใช้งาน' ของแปลงนี้,0,/_blob/c1df9df8a421ae626b36a87f91b9ff11,fcd
+93-VSD,ปัตตานี,VSD,Standard MOC2 STC&VSD,71.72,10.56,0.00,0.35,82.63,0.00,82.63,ไม่มีไฟล์ขอบเขต 'ใช้งาน' ของแปลงนี้,1,/_blob/61d14e7051ddc5b21bd5e49f8564ecab,baseline
+94-VSD,ปัตตานี,VSD,Standard MOC2 STC&VSD,118.00,22.24,0.00,0.64,140.88,0.00,140.87,ไม่มีไฟล์ขอบเขต 'ใช้งาน' ของแปลงนี้,1,/_blob/ab37edd8b346864bce3a83d03c1b229e,baseline
+95-VSD,ปัตตานี,VSD,Standard MOC2 STC&VSD,182.99,13.96,2.45,0.99,200.39,0.00,200.38,ไม่มีไฟล์ขอบเขต 'ใช้งาน' ของแปลงนี้,1,/_blob/4e50db56e46805b3776881cb762b0194,baseline
+97-VSD,กระบี่,VSD,Standard MOC2 STC&VSD,154.02,22.43,6.29,1.90,184.64,0.94,184.64,ไม่มีไฟล์ขอบเขต 'ใช้งาน' ของแปลงนี้,1,/_blob/2707a1a99317b0fdcced3bcda91e1788,baseline
+98-VSD,กระบี่,VSD,Standard MOC2 STC&VSD,122.89,25.67,1.81,0.57,150.94,2.38,150.95,ไม่มีไฟล์ขอบเขต 'ใช้งาน' ของแปลงนี้,1,/_blob/72e762c3eed8c816560e4553294f6cee,baseline
+99-VSD,กระบี่,VSD,Standard MOC2 STC&VSD,142.09,40.77,21.34,1.58,205.78,0.00,205.78,ไม่มีไฟล์ขอบเขต 'ใช้งาน' ของแปลงนี้,1,/_blob/35376b9f53d5801b16c81267793301c7,baseline
+100-VSD,กระบี่,VSD,Standard MOC2 STC&VSD,94.20,187.76,6.63,2.92,291.51,0.00,291.51,ไม่มีไฟล์ขอบเขต 'ใช้งาน' ของแปลงนี้,0,/_blob/75d6c406298b0a79d47fbde9460793a2,fcd
+101(1)-VSD,กระบี่,VSD,Standard MOC3 STC&VSD,171.72,24.57,1.57,0.00,197.86,0.00,197.86,,0,/_blob/e063f961e962ece69f694cdccc77ba06,fcd
+102-VSD,ภูเก็ต,VSD,Standard MOC2 STC&VSD,16.50,8.49,2.77,4.27,32.03,4.21,32.04,ไม่มีไฟล์ขอบเขต 'ใช้งาน' ของแปลงนี้,1,/_blob/4aa5628df8214b4ebe2827c27bad84b7,baseline
+105-VSD,กระบี่,VSD,Standard MOC3 STC&VSD,72.01,17.82,12.16,0.00,101.99,0.00,102.00,FCD (ไม่รวมแหล่งน้ำ) อยู่นอกขอบเขต 13.25 ไร่,0,/_blob/1776d107b60d0f843b2deef3c8fab2b4,fcd

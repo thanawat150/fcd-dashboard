@@ -1,0 +1,676 @@
+<meta name="dash-one-writer">
+<style>
+#dash-root .fcd { display: flex; flex-direction: column; gap: var(--cds-gap-xl); font-family: var(--font-anthropic-sans);
+  --lv-high: #3f9a4a; --lv-mid: #dfae1c; --lv-low: #d6452f; --lv-none: #9b9b9b; }
+.fcd b { font-weight: var(--cds-font-weight-medium); }
+.fcd-head { display: flex; flex-direction: column; gap: var(--cds-gap-sm); }
+.fcd-title { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-title); margin: 0; text-wrap: balance; }
+.fcd-take { margin: 0; max-width: 70ch; color: var(--color-fg); line-height: 1.6; }
+.fcd-sub { margin: 0; color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); }
+.fcd-bar { display: flex; flex-wrap: wrap; gap: var(--cds-gap-sm) var(--cds-gap-md); align-items: center; }
+.fcd-bar label { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+.fcd-scope { min-width: 0; max-width: 100%; }
+.fcd-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 10.5rem), 1fr)); gap: var(--cds-gap-md); }
+.fcd-tile { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-md) var(--cds-pad-lg); display: flex; flex-direction: column; gap: var(--cds-gap-xs); min-width: 0; }
+.fcd-tile-k { display: flex; align-items: center; gap: var(--cds-gap-xs); font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+.fcd-tile-v { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-title); font-variant-numeric: tabular-nums; line-height: 1.15; }
+.fcd-tile-v small { font-family: var(--font-anthropic-sans); font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); margin-left: .25em; }
+.fcd-tile-p { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); font-variant-numeric: tabular-nums; }
+.sw { display: inline-block; width: .7rem; height: .7rem; border-radius: 2px; flex: none; }
+.sw-high { background: var(--lv-high); } .sw-mid { background: var(--lv-mid); } .sw-low { background: var(--lv-low); } .sw-none { background: var(--lv-none); }
+.fcd-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr)); gap: var(--cds-gap-md); }
+.fcd-card { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-lg); display: flex; flex-direction: column; gap: var(--cds-gap-md); min-width: 0; }
+.fcd-card h2 { margin: 0; font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); }
+.fcd-card-head { display: flex; flex-direction: column; gap: var(--cds-gap-xs); }
+.fcd-legend { display: flex; flex-wrap: wrap; gap: var(--cds-gap-xs) var(--cds-gap-md); font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+.fcd-legend span { display: inline-flex; align-items: center; gap: var(--cds-gap-xs); }
+.fcd-seg { display: inline-flex; border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); overflow: hidden; }
+.fcd-seg button { font: inherit; font-size: var(--cds-font-size-caption); padding: var(--cds-pad-xs) var(--cds-pad-sm); background: transparent; color: var(--color-fg-muted); border: 0; cursor: pointer; }
+.fcd-seg button + button { border-left: 1px solid var(--color-border-line); }
+.fcd-seg button[aria-pressed="true"] { background: var(--color-bg); color: var(--color-fg); font-weight: var(--cds-font-weight-medium); }
+.fcd-seg button:focus-visible, .fcd th button:focus-visible { outline: 2px solid var(--color-fg); outline-offset: -2px; }
+.fcd-chart { position: relative; min-height: 6rem; display: flex; flex-direction: column; gap: 2px; }
+.fcd-scroll { max-height: 40rem; overflow: auto; padding-right: 2px; }
+.hrow { display: grid; grid-template-columns: minmax(4.5rem, 8rem) minmax(0, 1fr) 6rem; gap: var(--cds-gap-sm); align-items: center; font-size: var(--cds-font-size-body); min-height: 32px; padding: 0 2px; }
+.hrow .lb { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.hrow .vl { text-align: right; font-variant-numeric: tabular-nums; color: var(--color-fg-muted); }
+.hrow .tr { height: 20px; display: flex; border-radius: 3px; overflow: hidden; background: transparent; }
+.hrow .tr i { display: block; height: 100%; }
+.hrow:hover .lb { color: var(--color-fg); font-weight: var(--cds-font-weight-medium); }
+.hrow:hover .tr { outline: 1px solid var(--color-fg-muted); }
+.seg-high { background: var(--lv-high); } .seg-mid { background: var(--lv-mid); } .seg-low { background: var(--lv-low); } .seg-none { background: var(--lv-none); }
+.fcd-tip { position: absolute; z-index: 5; pointer-events: none; background: var(--cds-surface-popover); border: 1px solid var(--cds-border); border-radius: var(--cds-radius); box-shadow: var(--cds-shadow-popover); padding: var(--cds-pad-xs) var(--cds-pad-sm); font-size: var(--cds-font-size-caption); min-width: 11rem; }
+.fcd-tip .tt { color: var(--cds-text-secondary); margin-bottom: 2px; }
+.fcd-tip .tl { display: flex; align-items: center; gap: var(--cds-gap-xs); font-variant-numeric: tabular-nums; }
+.fcd-tip .tl em { font-style: normal; margin-left: auto; padding-left: var(--cds-pad-sm); }
+.fcd-rank { margin: 0; padding-left: 1.4rem; display: flex; flex-direction: column; gap: var(--cds-gap-xs); font-variant-numeric: tabular-nums; }
+.fcd-rank li span { color: var(--color-fg-muted); }
+.fcd-tools { display: flex; flex-wrap: wrap; gap: var(--cds-gap-sm) var(--cds-gap-md); align-items: center; }
+.fcd-search { font: inherit; font-size: var(--cds-font-size-caption); padding: var(--cds-pad-xs) var(--cds-pad-sm); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); background: var(--color-bg); color: var(--color-fg); min-width: 0; width: 16rem; max-width: 100%; }
+.fcd-tbox { max-height: 34rem; overflow: auto; }
+.fcd table { border-collapse: collapse; width: 100%; font-size: var(--cds-font-size-caption); font-variant-numeric: tabular-nums; }
+.fcd th { position: sticky; top: 0; background: var(--color-panel); text-align: left; border-bottom: 1px solid var(--color-border-line); padding: 0; z-index: 1; }
+.fcd th .th-t { display: block; padding: var(--cds-pad-xs) var(--cds-pad-sm); font-weight: var(--cds-font-weight-medium); white-space: nowrap; }
+.fcd th button { font: inherit; font-weight: var(--cds-font-weight-medium); color: var(--color-fg); background: none; border: 0; padding: var(--cds-pad-xs) var(--cds-pad-sm); cursor: pointer; width: 100%; text-align: inherit; white-space: nowrap; }
+.fcd th[aria-sort="ascending"] button::after { content: " ▲"; color: var(--color-fg-muted); }
+.fcd th[aria-sort="descending"] button::after { content: " ▼"; color: var(--color-fg-muted); }
+.fcd td { padding: var(--cds-pad-sm); border-bottom: 1px solid var(--color-border-line); white-space: nowrap; }
+.fcd .n { text-align: right; }
+.fcd td.wrap { white-space: normal; min-width: 12rem; color: var(--color-fg-muted); }
+.fcd details { border-top: 1px solid var(--color-border-line); padding-top: var(--cds-pad-md); }
+.fcd summary { cursor: pointer; font-weight: var(--cds-font-weight-medium); }
+.fcd dl { display: grid; grid-template-columns: minmax(7rem, max-content) minmax(0, 1fr); gap: var(--cds-gap-xs) var(--cds-gap-md); margin: var(--cds-gap-md) 0 0; max-width: 80ch; }
+.fcd dt { font-weight: var(--cds-font-weight-medium); } .fcd dd { margin: 0; color: var(--color-fg-muted); }
+.fcd-comp { display: flex; height: 28px; border-radius: var(--cds-radius); overflow: hidden; max-width: 56rem; }
+.fcd-comp i { display: flex; align-items: center; justify-content: center; min-width: 0; font-style: normal; font-size: var(--cds-font-size-caption); font-weight: var(--cds-font-weight-medium); font-variant-numeric: tabular-nums; color: #fff; white-space: nowrap; overflow: hidden; }
+.fcd-comp i.seg-mid { color: #3a2c00; }
+.fcd-meter { height: 6px; border-radius: 3px; background: var(--color-border-line); overflow: hidden; }
+.fcd-meter i { display: block; height: 100%; width: 0; border-radius: 3px; }
+@media (prefers-reduced-motion: no-preference) { .fcd-meter i { transition: width var(--cds-dur-slow) var(--cds-ease-out); } }
+.fcd-reset { font: inherit; font-size: var(--cds-font-size-caption); min-height: 32px; padding: 0 var(--cds-pad-sm); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); background: var(--color-panel); color: var(--color-fg); cursor: pointer; }
+.fcd-reset:hover { border-color: var(--color-fg-muted); }
+.fcd-reset::after { content: " ×"; color: var(--color-fg-muted); }
+.hrow[role="button"] { cursor: pointer; border-radius: var(--cds-radius); }
+.hrow[role="button"]:focus-visible { outline: 2px solid var(--color-fg); outline-offset: 2px; }
+.hrow[role="button"]:focus-visible .lb { color: var(--color-fg); font-weight: var(--cds-font-weight-medium); }
+.fcd-reset:focus-visible, .fcd tbody tr:focus-visible, .fcd-map a:focus-visible { outline: 2px solid var(--color-fg); outline-offset: 2px; }
+.fcd tbody tr:hover td { background: var(--color-bg); }
+.fcd-map img.loading { opacity: .4; }
+@media (prefers-reduced-motion: no-preference) { .fcd-map img { transition: opacity var(--cds-dur-slow) var(--cds-ease-out); } }
+.fcd-pair { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 26rem), 1fr)); gap: var(--cds-gap-md); align-items: start; }
+.fcd-map { position: relative; min-height: 20rem; display: flex; flex-direction: column; gap: var(--cds-gap-sm); }
+.fcd-map img { display: block; width: 100%; max-width: 100%; height: auto; aspect-ratio: 1240 / 1754; object-fit: contain; border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); background: #fff; }
+.fcd-map a { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+.fcd-mapinfo { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); font-variant-numeric: tabular-nums; }
+.fcd-pick { max-width: 100%; }
+.hrow.pick { cursor: pointer; }
+.hrow.on .lb { color: var(--color-fg); font-weight: var(--cds-font-weight-medium); }
+.hrow.on .tr { outline: 2px solid var(--color-fg); }
+.fcd tbody tr { cursor: pointer; }
+.fcd tbody tr.on td { background: var(--color-bg); font-weight: var(--cds-font-weight-medium); }
+@media (max-width: 30rem) { .hrow { grid-template-columns: 4.5rem minmax(0, 1fr) 4.5rem; } .fcd .hide-sm { display: none; } }
+[data-dash-source-state=refreshing] { opacity: .5; transition: opacity var(--cds-dur-slow); }
+</style>
+
+<div class="fcd">
+  <header class="fcd-head">
+    <h1 class="fcd-title">สรุปเนื้อที่ FCD</h1>
+    <p class="fcd-take"><b data-draw="scopeName">—</b> มีเนื้อที่ FCD รวม <b data-draw="sum" data-source="summary" data-field="total" data-where="scope=all" data-fmt="rai">—</b> ไร่ จาก <b data-draw="sum" data-source="summary" data-field="plots" data-where="scope=all" data-fmt="int">—</b> แปลง เป็นระดับมาก <b data-draw="sum" data-source="summary" data-field="high_pct" data-where="scope=all" data-fmt="pct">—</b> ปานกลาง <b data-draw="sum" data-source="summary" data-field="mid_pct" data-where="scope=all" data-fmt="pct">—</b> น้อย <b data-draw="sum" data-source="summary" data-field="low_pct" data-where="scope=all" data-fmt="pct">—</b> และไม่ระบุระดับ <b data-draw="sum" data-source="summary" data-field="none_pct" data-where="scope=all" data-fmt="pct">—</b></p>
+    <div class="fcd-comp" data-draw="comp" data-source="summary" role="img" aria-label="สัดส่วนเนื้อที่แต่ละระดับ">—</div>
+    <p class="fcd-sub">เนื้อที่จากรูป FCD ที่ตัดตามขอบเขต "ใช้งาน" (1 ไร่ = 1,600 ม²) ไม่รวมแหล่งน้ำ</p>
+  </header>
+
+  <div class="fcd-bar">
+    <label for="fcd-scope">ดูข้อมูล</label>
+    <select id="fcd-scope" class="dash-select fcd-scope" data-draw="scope" data-source="summary" aria-label="เลือกขอบเขตข้อมูล"></select>
+    <button type="button" class="fcd-reset" hidden>ดูทุกแปลง</button>
+    <span class="fcd-sub">หรือกดชื่อจังหวัดในกราฟรายจังหวัด</span>
+  </div>
+
+  <section class="fcd-tiles" aria-label="เนื้อที่แต่ละระดับ">
+    <div class="fcd-tile">
+      <div class="fcd-tile-k">เนื้อที่ FCD รวม</div>
+      <div class="fcd-tile-v"><span data-draw="sum" data-source="summary" data-field="total" data-where="scope=all" data-fmt="rai">—</span><small>ไร่</small></div>
+      <div class="fcd-tile-p"><span data-draw="sum" data-source="summary" data-field="plots" data-where="scope=all" data-fmt="int">—</span> แปลง</div>
+    </div>
+    <div class="fcd-tile lv-high">
+      <div class="fcd-tile-k"><i class="sw sw-high"></i>มาก (&gt;65%)</div>
+      <div class="fcd-tile-v"><span data-draw="sum" data-source="summary" data-field="high" data-where="scope=all" data-fmt="rai">—</span><small>ไร่</small></div>
+      <div class="fcd-tile-p"><span data-draw="sum" data-source="summary" data-field="high_pct" data-where="scope=all" data-fmt="pct">—</span> ของเนื้อที่</div>
+      <div class="fcd-meter"><i class="seg-high" data-draw="meter" data-source="summary" data-k="high_pct"></i></div>
+    </div>
+    <div class="fcd-tile">
+      <div class="fcd-tile-k"><i class="sw sw-mid"></i>ปานกลาง (30–65%)</div>
+      <div class="fcd-tile-v"><span data-draw="sum" data-source="summary" data-field="mid" data-where="scope=all" data-fmt="rai">—</span><small>ไร่</small></div>
+      <div class="fcd-tile-p"><span data-draw="sum" data-source="summary" data-field="mid_pct" data-where="scope=all" data-fmt="pct">—</span> ของเนื้อที่</div>
+      <div class="fcd-meter"><i class="seg-mid" data-draw="meter" data-source="summary" data-k="mid_pct"></i></div>
+    </div>
+    <div class="fcd-tile">
+      <div class="fcd-tile-k"><i class="sw sw-low"></i>น้อย (&lt;30%)</div>
+      <div class="fcd-tile-v"><span data-draw="sum" data-source="summary" data-field="low" data-where="scope=all" data-fmt="rai">—</span><small>ไร่</small></div>
+      <div class="fcd-tile-p"><span data-draw="sum" data-source="summary" data-field="low_pct" data-where="scope=all" data-fmt="pct">—</span> ของเนื้อที่</div>
+      <div class="fcd-meter"><i class="seg-low" data-draw="meter" data-source="summary" data-k="low_pct"></i></div>
+    </div>
+    <div class="fcd-tile">
+      <div class="fcd-tile-k"><i class="sw sw-none"></i>ไม่ระบุระดับ</div>
+      <div class="fcd-tile-v"><span data-draw="sum" data-source="summary" data-field="none" data-where="scope=all" data-fmt="rai">—</span><small>ไร่</small></div>
+      <div class="fcd-tile-p"><span data-draw="sum" data-source="summary" data-field="none_pct" data-where="scope=all" data-fmt="pct">—</span> ของเนื้อที่</div>
+      <div class="fcd-meter"><i class="seg-none" data-draw="meter" data-source="summary" data-k="none_pct"></i></div>
+    </div>
+  </section>
+
+  <div class="fcd-grid">
+    <section class="fcd-card" id="by-province">
+      <div class="fcd-card-head">
+        <h2>เนื้อที่แต่ละระดับ รายจังหวัด</h2>
+        <p class="fcd-sub">เรียงจากจังหวัดที่มีเนื้อที่ FCD มากที่สุด ตัวเลขท้ายแท่งคือเนื้อที่รวม (ไร่) ชี้ที่แท่งเพื่อดูรายละเอียด กดที่จังหวัดเพื่อดูเฉพาะจังหวัดนั้น</p>
+        <div class="fcd-legend"><span><i class="sw sw-high"></i>มาก</span><span><i class="sw sw-mid"></i>ปานกลาง</span><span><i class="sw sw-low"></i>น้อย</span><span><i class="sw sw-none"></i>ไม่ระบุระดับ</span></div>
+      </div>
+      <div class="fcd-chart" data-draw="prov" data-source="fcd">—</div>
+    </section>
+
+    <section class="fcd-card" id="ranking">
+      <div class="fcd-card-head">
+        <h2>แปลงที่มีระดับมากที่สุดและน้อยที่สุด</h2>
+        <p class="fcd-sub">5 อันดับในขอบเขตที่เลือก</p>
+      </div>
+      <div class="fcd-card-head">
+        <div class="fcd-tile-k"><i class="sw sw-high"></i>เนื้อที่ระดับมากสูงสุด (ไร่)</div>
+        <ol class="fcd-rank" data-draw="rank" data-kind="high" data-source="fcd"></ol>
+      </div>
+      <div class="fcd-card-head">
+        <div class="fcd-tile-k"><i class="sw sw-low"></i>เนื้อที่ระดับน้อยและไม่ระบุสูงสุด (ไร่)</div>
+        <ol class="fcd-rank" data-draw="rank" data-kind="low" data-source="fcd"></ol>
+      </div>
+      <div class="fcd-card-head">
+        <div class="fcd-tile-k"><i class="sw sw-high"></i>สัดส่วนระดับมากสูงสุด (แปลงตั้งแต่ 10 ไร่)</div>
+        <ol class="fcd-rank" data-draw="rank" data-kind="highpct" data-source="fcd"></ol>
+      </div>
+    </section>
+
+    <section class="fcd-card" id="baseline">
+      <div class="fcd-card-head">
+        <h2>แปลง baseline ตามระดับ FCD</h2>
+        <p class="fcd-sub">จำนวนแปลง baseline ที่ตกอยู่ในแต่ละระดับ ในขอบเขตที่เลือก</p>
+      </div>
+      <p class="fcd-take" data-draw="blHead" data-source="baseline fcd">—</p>
+      <div class="fcd-chart" data-draw="blSum" data-source="baseline fcd">—</div>
+    </section>
+  </div>
+
+  <div class="fcd-pair">
+  <section class="fcd-card" id="by-plot">
+    <div class="fcd-card-head">
+      <h2>เนื้อที่แต่ละระดับ รายแปลง</h2>
+      <p class="fcd-sub">ดูเป็นไร่เพื่อเทียบขนาดแปลง หรือร้อยละเพื่อเทียบสัดส่วนระดับในแต่ละแปลง กดที่แท่งเพื่อเปิดแผนที่แปลงนั้น</p>
+    </div>
+    <div class="fcd-tools">
+      <div class="fcd-seg" role="group" aria-label="หน่วย">
+        <button type="button" data-mode="rai" aria-pressed="true">ไร่</button>
+        <button type="button" data-mode="pct" aria-pressed="false">ร้อยละ</button>
+      </div>
+      <div class="fcd-seg" role="group" aria-label="เรียงตาม">
+        <button type="button" data-sort="total" aria-pressed="true">เนื้อที่รวม</button>
+        <button type="button" data-sort="high_pct" aria-pressed="false">สัดส่วนมาก</button>
+        <button type="button" data-sort="low_pct" aria-pressed="false">สัดส่วนน้อย+ไม่ระบุ</button>
+        <button type="button" data-sort="plot" aria-pressed="false">รหัสแปลง</button>
+      </div>
+      <div class="fcd-legend"><span><i class="sw sw-high"></i>มาก</span><span><i class="sw sw-mid"></i>ปานกลาง</span><span><i class="sw sw-low"></i>น้อย</span><span><i class="sw sw-none"></i>ไม่ระบุระดับ</span></div>
+    </div>
+    <div class="fcd-scroll"><div class="fcd-chart" data-draw="plots" data-source="fcd">—</div></div>
+  </section>
+
+  <section class="fcd-card" id="map">
+    <div class="fcd-card-head">
+      <h2>แผนที่ FCD</h2>
+      <p class="fcd-sub">แปลงที่มีแปลง baseline ใช้แผนที่ชุด FCD + แปลง baseline (กรอบฟ้า BL-n) แปลงอื่นใช้แผนที่ FCD เดิม ลายเส้นเขียว เหลือง แดง คือระดับมาก ปานกลาง น้อย เส้นแดงทึบคือขอบเขตพื้นที่โครงการ เลือกแปลงจากรายการ หรือกดที่แท่งหรือแถวในตาราง</p>
+    </div>
+    <div class="fcd-tools">
+      <label class="fcd-sub" for="fcd-pick">แปลง</label>
+      <select id="fcd-pick" class="dash-select fcd-pick" data-draw="mapPick" data-source="fcd" aria-label="เลือกแปลงที่จะดูแผนที่"></select>
+    </div>
+    <p class="fcd-mapinfo" data-draw="mapInfo" data-source="fcd">—</p>
+    <div class="fcd-map" data-draw="map" data-source="fcd">—</div>
+    <div class="fcd-card-head" id="map-baseline">
+      <div class="fcd-tile-k">แปลง baseline ในแปลงนี้</div>
+      <p class="fcd-sub" data-draw="blNote" data-source="baseline">—</p>
+      <div class="fcd-tbox">
+        <table data-source="baseline" data-row-key="id">
+          <thead><tr>
+            <th data-field="baseline"><span class="th-t">แปลง</span></th>
+            <th data-field="fcd_level"><span class="th-t">ระดับ FCD</span></th>
+            <th data-field="rai" class="n"><span class="th-t">เนื้อที่ (ไร่)</span></th>
+            <th data-field="E" class="n"><span class="th-t">E</span></th>
+            <th data-field="N" class="n"><span class="th-t">N</span></th>
+          </tr></thead>
+          <tbody data-draw="blTable"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+  </div>
+
+  <section class="fcd-card" id="table">
+    <div class="fcd-card-head">
+      <h2>ตารางรายแปลง</h2>
+      <p class="fcd-sub">กดหัวคอลัมน์เพื่อเรียง ดาวน์โหลดเป็น CSV ได้จากเมนู Sources</p>
+    </div>
+    <div class="fcd-tools">
+      <input id="fcd-q" class="fcd-search" type="search" placeholder="ค้นหารหัสแปลง จังหวัด หรือเล่ม" aria-label="ค้นหาในตาราง">
+      <span class="fcd-sub">แสดง <b data-draw="tcount">—</b> แปลง</span>
+    </div>
+    <div class="fcd-tbox">
+      <table data-source="fcd" data-row-key="plot">
+        <thead><tr>
+          <th data-field="plot" data-k="plot"><button type="button">แปลง</button></th>
+          <th data-field="province" data-k="province"><button type="button">จังหวัด</button></th>
+          <th data-field="ptype" data-k="ptype" class="hide-sm"><button type="button">ประเภท</button></th>
+          <th data-field="book" data-k="book" class="hide-sm"><button type="button">เล่ม PDD</button></th>
+          <th data-field="high" data-k="high" class="n"><button type="button">มาก</button></th>
+          <th data-field="mid" data-k="mid" class="n"><button type="button">ปานกลาง</button></th>
+          <th data-field="low" data-k="low" class="n"><button type="button">น้อย</button></th>
+          <th data-field="none" data-k="none" class="n"><button type="button">ไม่ระบุ</button></th>
+          <th data-field="total" data-k="total" class="n" aria-sort="descending"><button type="button">รวม (ไร่)</button></th>
+          <th data-field="water" data-k="water" class="n hide-sm"><button type="button">แหล่งน้ำ</button></th>
+          <th data-field="baseline_n" data-k="baseline_n" class="n"><button type="button">baseline</button></th>
+          <th data-field="note" data-k="note" class="hide-sm"><button type="button">หมายเหตุ</button></th>
+        </tr></thead>
+        <tbody data-draw="table"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <details>
+    <summary>ที่มาของตัวเลขและข้อควรรู้</summary>
+    <dl>
+      <dt>ที่มา</dt><dd>ไฟล์ fcd_area.csv จากสคริปต์ทำแผนที่ FCD (make_fcd_maps.py) จับคู่เล่ม PDD จากทะเบียนรายแปลง SiamTC_Plot_to_PDD_7Books_160Plots</dd>
+      <dt>ระดับ</dt><dd>ร้อยละการปกคลุมเรือนยอดจาก Landsat 8: มาก มากกว่า 65% ปานกลาง 30–65% น้อย ต่ำกว่า 30% ส่วน "ไม่ระบุระดับ" คือ gridcode 0 (Bare/FCD-Process Error)</dd>
+      <dt>เนื้อที่รวม</dt><dd>ผลรวมของ 4 ระดับ ไม่รวมแหล่งน้ำ จึงอาจต่างจากเนื้อที่ตามตารางคุมบนหัวแผนที่เล็กน้อย</dd>
+      <dt>ขอบเขต</dt><dd>STC ตัด FCD ตามขอบเขต MOC_2_ใช้งาน ส่วน VSD ใช้ไฟล์ FCD รายแปลง แปลงที่ไม่มีไฟล์ขอบเขต "ใช้งาน" ใช้ขอบเขต MOC_2/MOC_1 แทน</dd>
+      <dt>แปลงที่มีหมายเหตุ</dt><dd><ul data-draw="notes" data-source="fcd"></ul></dd>
+    </dl>
+  </details>
+</div>
+
+<script>
+  const F = window.FCD = window.FCD || {};
+  F.state = { scope: 'all', mode: 'rai', sort: 'total', tKey: 'total', tDir: -1, q: '' };
+  F.LV = [['high', 'มาก'], ['mid', 'ปานกลาง'], ['low', 'น้อย'], ['none', 'ไม่ระบุระดับ']];
+  F.n = (v) => +v || 0;
+  F.rai = d3.format(',.2f');
+  F.int = d3.format(',');
+  F.pct = d3.format('.1%');
+  F.plotNum = (p) => { const m = String(p).match(/^(\d+)(?:\((\d+)\))?/); return m ? (+m[1]) * 100 + (+(m[2] || 0)) : 1e9; };
+  F.inScope = (r) => {
+    const s = F.state.scope;
+    if (s === 'all') return true;
+    const k = s.slice(0, 2), v = s.slice(2);
+    return (k === 'p:' && r.province === v) || (k === 'b:' && r.book === v) || (k === 't:' && r.ptype === v);
+  };
+  F.rows = () => { const d = dash.data('fcd'); return d.status === 'ok' ? d.data.filter(F.inScope) : null; };
+  F.agg = (rs) => {
+    const o = { high: 0, mid: 0, low: 0, none: 0, total: 0 };
+    rs.forEach((r) => { F.LV.forEach(([k]) => { o[k] += F.n(r[k]); }); o.total += F.n(r.total); });
+    return o;
+  };
+  F.redraw = () => {
+    document.querySelectorAll('.fcd-reset').forEach((b) => { b.hidden = F.state.scope === 'all'; });
+    ['sum', 'comp', 'meter', 'scopeName', 'prov', 'plots', 'rank', 'table', 'tcount', 'scope', 'mapPick', 'mapInfo', 'map', 'blNote', 'blTable', 'blHead', 'blSum'].forEach((n) => dash.draw(n));
+  };
+  F.setScope = (s) => { F.state.scope = s || 'all'; F.redraw(); };
+  F.keyPick = (el, fn) => {
+    el.tabIndex = 0;
+    el.addEventListener('click', fn);
+    el.addEventListener('keydown', (ev) => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); fn(); } });
+  };
+  F.state.plot = null;
+  F.curPlot = () => {
+    const rs = F.rows();
+    if (!rs || !rs.length) return null;
+    const hit = rs.find((r) => r.plot === F.state.plot);
+    if (hit) return hit;
+    return rs.slice().sort((a, b) => F.plotNum(a.plot) - F.plotNum(b.plot))[0];
+  };
+  F.pick = (plot) => {
+    F.state.plot = plot;
+    ['mapPick', 'mapInfo', 'map', 'plots', 'table', 'blNote', 'blTable'].forEach((n) => dash.draw(n));
+  };
+
+  dash.calc('summary', {
+    inputs: ['fcd'],
+    title: 'สรุปเนื้อที่ตามขอบเขต',
+    description: 'รวมเนื้อที่แต่ละระดับ (ไร่) และสัดส่วนต่อเนื้อที่รวม ทั้งหมด รายจังหวัด รายเล่ม PDD และรายประเภท',
+    fn: (fcd) => {
+      const n = (v) => +v || 0;
+      const make = (scope, label, group, rs) => {
+        const s = (k) => +rs.reduce((a, r) => a + n(r[k]), 0).toFixed(2);
+        const t = s('total');
+        const p = (k) => (t ? +(s(k) / t).toFixed(4) : 0);
+        return { scope, label, group, plots: rs.length, high: s('high'), mid: s('mid'), low: s('low'), none: s('none'), total: t, water: s('water'),
+          high_pct: p('high'), mid_pct: p('mid'), low_pct: p('low'), none_pct: p('none') };
+      };
+      const by = (key, prefix, group) => {
+        const m = new Map();
+        fcd.forEach((r) => { if (!m.has(r[key])) m.set(r[key], []); m.get(r[key]).push(r); });
+        return [...m].map(([v, rs]) => make(prefix + v, v, group, rs)).sort((a, b) => b.total - a.total);
+      };
+      return [make('all', 'ทุกแปลง', 'ทั้งหมด', fcd), ...by('province', 'p:', 'จังหวัด'), ...by('book', 'b:', 'เล่ม PDD'), ...by('ptype', 't:', 'ประเภทแปลง')];
+    }
+  });
+
+  dash.draw('scope', (sel) => {
+    const d = dash.data('summary');
+    const rows = d.status === 'ok' ? d.data : [];
+    const groups = new Map();
+    rows.forEach((r) => { if (!groups.has(r.group)) groups.set(r.group, []); groups.get(r.group).push(r); });
+    sel.replaceChildren(...[...groups].map(([g, rs]) => {
+      if (g === 'ทั้งหมด') return new Option(`ทุกแปลง (${rs[0].plots} แปลง)`, 'all');
+      const og = document.createElement('optgroup');
+      og.label = g;
+      rs.forEach((r) => og.append(new Option(`${r.label} (${r.plots} แปลง)`, r.scope)));
+      return og;
+    }));
+    if (!rows.length) sel.append(new Option('ทุกแปลง', 'all'));
+    sel.value = F.state.scope;
+    sel.onchange = () => F.setScope(sel.value);
+  });
+
+  dash.draw('scopeName', (el) => {
+    const d = dash.data('summary');
+    const r = d.status === 'ok' ? d.data.find((x) => x.scope === F.state.scope) : null;
+    if (!r) { el.textContent = '—'; return; }
+    el.textContent = r.scope === 'all' ? 'ทุกแปลง' : (r.group === 'จังหวัด' ? `จังหวัด${r.label}` : r.group === 'ประเภทแปลง' ? `แปลง ${r.label}` : `เล่ม ${r.label}`);
+  });
+
+  dash.draw('sum', (el) => {
+    el.setAttribute('data-where', 'scope=' + encodeURIComponent(F.state.scope));
+    const d = dash.data('summary');
+    const r = d.status === 'ok' ? d.data.find((x) => x.scope === F.state.scope) : null;
+    el.classList.toggle('dash-skeleton', d.status === 'loading');
+    if (!r) { el.textContent = '—'; return; }
+    const v = r[el.dataset.field], f = el.dataset.fmt;
+    el.textContent = f === 'pct' ? F.pct(v) : f === 'int' ? F.int(v) : F.rai(v);
+  });
+
+  F.curSummary = () => {
+    const d = dash.data('summary');
+    return d.status === 'ok' ? d.data.find((x) => x.scope === F.state.scope) : null;
+  };
+
+  dash.draw('comp', (el) => {
+    const r = F.curSummary();
+    el.classList.toggle('dash-skeleton', dash.data('summary').status === 'loading');
+    if (!r) { el.textContent = '—'; return; }
+    const segs = F.LV.filter(([k]) => r[k + '_pct'] > 0).map(([k, name]) => {
+      const s = document.createElement('i');
+      s.className = 'seg-' + k;
+      s.style.flex = `${r[k + '_pct']} 1 0`;
+      s.title = `${name} ${F.rai(r[k])} ไร่ (${F.pct(r[k + '_pct'])})`;
+      if (r[k + '_pct'] >= 0.06) s.textContent = `${name} ${F.pct(r[k + '_pct'])}`;
+      return s;
+    });
+    el.replaceChildren(...segs);
+    el.setAttribute('aria-label', 'สัดส่วนเนื้อที่: ' + F.LV.map(([k, name]) => `${name} ${F.pct(r[k + '_pct'])}`).join(', '));
+  });
+
+  dash.draw('meter', (el) => {
+    const r = F.curSummary();
+    el.style.width = r ? (r[el.dataset.k] * 100) + '%' : '0';
+  });
+
+  F.tip = (box) => {
+    let t = box.querySelector(':scope > .fcd-tip');
+    if (!t) { t = document.createElement('div'); t.className = 'fcd-tip'; t.hidden = true; box.append(t); }
+    return t;
+  };
+  F.showTip = (box, row, ev, title, o) => {
+    const t = F.tip(box);
+    const tt = document.createElement('div'); tt.className = 'tt'; tt.textContent = title;
+    const lines = F.LV.map(([k, name]) => {
+      const l = document.createElement('div'); l.className = 'tl';
+      const sw = document.createElement('i'); sw.className = 'sw sw-' + k;
+      const nm = document.createElement('span'); nm.textContent = name;
+      const v = document.createElement('em'); v.textContent = `${F.rai(o[k])} ไร่ · ${F.pct(o.total ? o[k] / o.total : 0)}`;
+      l.append(sw, nm, v); return l;
+    });
+    const tot = document.createElement('div'); tot.className = 'tl';
+    const tn = document.createElement('b'); tn.textContent = 'รวม';
+    const tv = document.createElement('em'); tv.textContent = `${F.rai(o.total)} ไร่`;
+    tot.append(tn, tv);
+    t.replaceChildren(tt, ...lines, tot);
+    t.hidden = false;
+    const br = box.getBoundingClientRect(), rr = row.getBoundingClientRect();
+    const w = t.offsetWidth, h = t.offsetHeight;
+    let x = ev.clientX - br.left + 12; if (x + w > box.clientWidth) x = Math.max(0, ev.clientX - br.left - w - 12);
+    let y = rr.bottom - br.top + 4; if (y + h > box.scrollHeight && rr.top - br.top - h - 4 > 0) y = rr.top - br.top - h - 4;
+    t.style.left = x + 'px'; t.style.top = y + 'px';
+  };
+  F.bars = (el, items, mode, onPick) => {
+    const max = d3.max(items, (d) => d.total) || 1;
+    const rows = items.map((d) => {
+      const row = document.createElement('div'); row.className = 'hrow';
+      const lb = document.createElement('div'); lb.className = 'lb'; lb.textContent = d.label;
+      const tr = document.createElement('div'); tr.className = 'tr';
+      const base = mode === 'pct' ? (d.total || 1) : max;
+      F.LV.forEach(([k]) => { if (d[k] > 0) { const s = document.createElement('i'); s.className = 'seg-' + k; s.style.width = (d[k] / base * 100) + '%'; tr.append(s); } });
+      const vl = document.createElement('div'); vl.className = 'vl';
+      vl.textContent = mode === 'pct' ? F.pct(d.total ? d.high / d.total : 0) + ' มาก' : F.rai(d.total);
+      row.append(lb, tr, vl);
+      if (onPick) {
+        row.setAttribute('role', 'button');
+        row.setAttribute('aria-label', `${d.title || d.label} เนื้อที่รวม ${F.rai(d.total)} ไร่ มาก ${F.pct(d.total ? d.high / d.total : 0)}`);
+        if (d.plot) { const cur = F.curPlot(); if (cur && cur.plot === d.plot) { row.classList.add('on'); row.setAttribute('aria-pressed', 'true'); } }
+        F.keyPick(row, () => onPick(d));
+        row.addEventListener('focus', () => { const rr = row.getBoundingClientRect(); F.showTip(el, row, { clientX: rr.left + rr.width / 2 }, d.title || d.label, d); });
+        row.addEventListener('blur', () => { F.tip(el).hidden = true; });
+      }
+      row.addEventListener('mousemove', (ev) => F.showTip(el, row, ev, d.title || d.label, d));
+      row.addEventListener('mouseleave', () => { F.tip(el).hidden = true; });
+      return row;
+    });
+    el.replaceChildren(...rows);
+    F.tip(el);
+  };
+
+  dash.draw('prov', (el) => {
+    const rs = F.rows();
+    el.classList.toggle('dash-skeleton', dash.data('fcd').status === 'loading');
+    if (!rs) { el.textContent = '—'; return; }
+    const m = d3.group(rs, (r) => r.province);
+    const items = [...m].map(([p, g]) => Object.assign(F.agg(g), { label: p, title: `${p} · ${g.length} แปลง` })).sort((a, b) => b.total - a.total);
+    F.bars(el, items, 'rai', F.state.scope.startsWith('p:') ? null : (d) => F.setScope('p:' + d.label));
+  });
+
+  dash.draw('plots', (el) => {
+    const rs = F.rows();
+    el.classList.toggle('dash-skeleton', dash.data('fcd').status === 'loading');
+    if (!rs) { el.textContent = '—'; return; }
+    const items = rs.map((r) => Object.assign(F.agg([r]), { label: r.plot, plot: r.plot, title: `${r.plot} · ${r.province} · ${r.book}` }));
+    const s = F.state.sort;
+    const share = (d, ks) => (d.total ? ks.reduce((a, k) => a + d[k], 0) / d.total : 0);
+    items.sort(s === 'plot' ? (a, b) => F.plotNum(a.plot) - F.plotNum(b.plot) || a.plot.localeCompare(b.plot)
+      : s === 'high_pct' ? (a, b) => share(b, ['high']) - share(a, ['high'])
+      : s === 'low_pct' ? (a, b) => share(b, ['low', 'none']) - share(a, ['low', 'none'])
+      : (a, b) => b.total - a.total);
+    F.bars(el, items, F.state.mode, (d) => F.pick(d.plot));
+  });
+
+  dash.draw('rank', (el) => {
+    const rs = F.rows();
+    if (!rs) { el.replaceChildren(); return; }
+    const kind = el.dataset.kind;
+    const v = (r) => kind === 'high' ? F.n(r.high) : kind === 'low' ? F.n(r.low) + F.n(r.none) : (F.n(r.total) ? F.n(r.high) / F.n(r.total) : 0);
+    const pool = kind === 'highpct' ? rs.filter((r) => F.n(r.total) >= 10) : rs;
+    const top = pool.slice().sort((a, b) => v(b) - v(a)).slice(0, 5).filter((r) => v(r) > 0);
+    el.replaceChildren(...top.map((r) => {
+      const li = document.createElement('li');
+      const b = document.createElement('b'); b.textContent = r.plot;
+      const sp = document.createElement('span');
+      sp.textContent = ` ${r.province} · ` + (kind === 'highpct' ? `${F.pct(v(r))} ของ ${F.rai(F.n(r.total))} ไร่` : `${F.rai(v(r))} ไร่ (${F.pct(F.n(r.total) ? v(r) / F.n(r.total) : 0)} ของแปลง)`);
+      li.append(b, sp); return li;
+    }));
+    if (!top.length) { const li = document.createElement('li'); li.textContent = 'ไม่มีแปลงในขอบเขตนี้'; el.append(li); }
+  });
+
+  F.tableRows = () => {
+    const rs = F.rows();
+    if (!rs) return null;
+    const q = F.state.q.trim().toLowerCase();
+    const k = F.state.tKey, dir = F.state.tDir;
+    const numK = ['high', 'mid', 'low', 'none', 'total', 'water', 'baseline_n'].includes(k);
+    return rs.filter((r) => !q || [r.plot, r.province, r.book, r.ptype, r.note].join(' ').toLowerCase().includes(q))
+      .sort((a, b) => numK ? dir * (F.n(a[k]) - F.n(b[k])) : k === 'plot' ? dir * (F.plotNum(a.plot) - F.plotNum(b.plot)) : dir * String(a[k]).localeCompare(String(b[k]), 'th'));
+  };
+
+  dash.draw('table', (tb) => {
+    const rs = F.tableRows();
+    if (!rs) { tb.replaceChildren(); return; }
+    const cols = ['plot', 'province', 'ptype', 'book', 'high', 'mid', 'low', 'none', 'total', 'water', 'baseline_n', 'note'];
+    const numK = ['high', 'mid', 'low', 'none', 'total', 'water'];
+    const hide = ['ptype', 'book', 'water', 'note'];
+    const cur = F.curPlot();
+    tb.replaceChildren(...rs.map((r) => {
+      const tr = document.createElement('tr');
+      if (cur && cur.plot === r.plot) tr.classList.add('on');
+      F.keyPick(tr, () => {
+        F.pick(r.plot);
+        const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+        document.querySelectorAll('#map').forEach((m) => m.scrollIntoView({ behavior: still ? 'auto' : 'smooth', block: 'nearest' }));
+      });
+      cols.forEach((c) => {
+        const td = document.createElement('td');
+        td.textContent = numK.includes(c) ? F.rai(F.n(r[c])) : (r[c] || '');
+        if (c === 'baseline_n') { td.textContent = r[c] || '0'; td.classList.add('n'); }
+        if (numK.includes(c)) td.classList.add('n');
+        if (c === 'note') td.classList.add('wrap');
+        if (hide.includes(c)) td.classList.add('hide-sm');
+        tr.append(td);
+      });
+      return tr;
+    }));
+  });
+
+  dash.draw('tcount', (el) => {
+    const rs = F.tableRows();
+    el.textContent = rs ? F.int(rs.length) : '—';
+  });
+
+  dash.draw('mapPick', (sel) => {
+    const rs = F.rows();
+    if (!rs) { sel.replaceChildren(); return; }
+    const sorted = rs.slice().sort((a, b) => F.plotNum(a.plot) - F.plotNum(b.plot) || a.plot.localeCompare(b.plot));
+    sel.replaceChildren(...sorted.map((r) => new Option(`${r.plot} · ${r.province}`, r.plot)));
+    const cur = F.curPlot();
+    sel.value = cur ? cur.plot : '';
+    sel.onchange = () => F.pick(sel.value);
+  });
+
+  dash.draw('mapInfo', (el) => {
+    const r = F.curPlot();
+    if (!r) { el.textContent = '—'; return; }
+    el.textContent = `${r.plot} · จังหวัด${r.province} · ${r.book} · รวม ${F.rai(F.n(r.total))} ไร่ (มาก ${F.rai(F.n(r.high))} · ปานกลาง ${F.rai(F.n(r.mid))} · น้อย ${F.rai(F.n(r.low))} · ไม่ระบุ ${F.rai(F.n(r.none))})`;
+  });
+
+  dash.draw('map', (el) => {
+    const r = F.curPlot();
+    el.classList.toggle('dash-skeleton', dash.data('fcd').status === 'loading');
+    if (!r) { el.textContent = '—'; return; }
+    if (!r.map) { el.textContent = 'ยังไม่มีรูปแผนที่ของแปลงนี้'; return; }
+    let img = el.querySelector('img'), a = el.querySelector('a');
+    if (!img) {
+      img = document.createElement('img');
+      img.decoding = 'async';
+      img.addEventListener('load', () => img.classList.remove('loading'));
+      img.addEventListener('error', () => img.classList.remove('loading'));
+      a = document.createElement('a');
+      a.target = '_blank'; a.rel = 'noopener';
+      a.textContent = 'เปิดรูปแผนที่ขนาดเต็มในแท็บใหม่';
+      el.replaceChildren(img, a);
+    }
+    if (img.getAttribute('src') !== r.map) { img.classList.add('loading'); img.setAttribute('src', r.map); }
+    img.alt = `แผนที่การปกคลุมเรือนยอด (FCD) แปลง ${r.plot} จังหวัด${r.province}`;
+    a.href = r.map;
+  });
+
+  F.blFor = (plot) => {
+    const b = dash.data('baseline');
+    if (b.status !== 'ok') return null;
+    return b.data.filter((x) => x.plot === plot).sort((a, c) => (parseInt(a.baseline.replace(/\D/g, ''), 10) || 0) - (parseInt(c.baseline.replace(/\D/g, ''), 10) || 0));
+  };
+
+  dash.draw('blNote', (el) => {
+    const r = F.curPlot();
+    const bl = r ? F.blFor(r.plot) : null;
+    if (!r || !bl) { el.textContent = '—'; return; }
+    el.textContent = bl.length
+      ? `${r.plot} มีแปลง baseline ${bl.length} แปลง`
+      : `${r.plot} ไม่มีแปลง baseline จึงแสดงแผนที่ FCD เดิม`;
+  });
+
+  dash.draw('blTable', (tb) => {
+    const r = F.curPlot();
+    const bl = r ? F.blFor(r.plot) : null;
+    if (!bl) { tb.replaceChildren(); return; }
+    tb.replaceChildren(...bl.map((b) => {
+      const tr = document.createElement('tr');
+      tr.dataset.key = b.id;
+      [b.baseline, b.fcd_level, F.rai(F.n(b.rai)), b.E, b.N].forEach((v, i) => {
+        const td = document.createElement('td');
+        td.textContent = v;
+        if (i >= 2) td.classList.add('n');
+        tr.append(td);
+      });
+      return tr;
+    }));
+  });
+
+  F.blScope = () => {
+    const rs = F.rows(), b = dash.data('baseline');
+    if (!rs || b.status !== 'ok') return null;
+    const plots = new Set(rs.map((r) => r.plot));
+    return { bl: b.data.filter((x) => plots.has(x.plot)), plots: rs.length, withBl: rs.filter((r) => F.n(r.baseline_n) > 0).length };
+  };
+
+  dash.draw('blHead', (el) => {
+    const s = F.blScope();
+    if (!s) { el.textContent = '—'; return; }
+    el.textContent = s.bl.length
+      ? `แปลง baseline ${F.int(s.bl.length)} แปลง อยู่ใน ${F.int(s.withBl)} จาก ${F.int(s.plots)} แปลงปลูก`
+      : `ไม่มีแปลง baseline ในขอบเขตนี้ (${F.int(s.plots)} แปลงปลูก)`;
+  });
+
+  dash.draw('blSum', (el) => {
+    const s = F.blScope();
+    if (!s) { el.textContent = '—'; return; }
+    const lv = [['high', 'มาก'], ['mid', 'ปานกลาง'], ['low', 'น้อย']];
+    const total = s.bl.length || 1;
+    const max = Math.max(1, ...lv.map(([, name]) => s.bl.filter((x) => x.fcd_level === name).length));
+    el.replaceChildren(...lv.map(([k, name]) => {
+      const n = s.bl.filter((x) => x.fcd_level === name).length;
+      const row = document.createElement('div'); row.className = 'hrow';
+      const lb = document.createElement('div'); lb.className = 'lb'; lb.textContent = name;
+      const tr = document.createElement('div'); tr.className = 'tr';
+      if (n) { const seg = document.createElement('i'); seg.className = 'seg-' + k; seg.style.width = (n / max * 100) + '%'; tr.append(seg); }
+      const vl = document.createElement('div'); vl.className = 'vl';
+      vl.textContent = `${F.int(n)} แปลง · ${F.pct(n / total)}`;
+      row.append(lb, tr, vl);
+      return row;
+    }));
+  });
+
+  dash.draw('notes', (ul) => {
+    const d = dash.data('fcd');
+    if (d.status !== 'ok') { ul.replaceChildren(); return; }
+    const noB = d.data.filter((r) => /ไม่มีไฟล์ขอบเขต/.test(r.note || '')).map((r) => r.plot);
+    const other = d.data.filter((r) => r.note && !/ไม่มีไฟล์ขอบเขต/.test(r.note));
+    const items = [];
+    if (noB.length) { const li = document.createElement('li'); li.textContent = `ไม่มีไฟล์ขอบเขต "ใช้งาน" ${noB.length} แปลง: ${noB.join(', ')}`; items.push(li); }
+    other.forEach((r) => { const li = document.createElement('li'); li.textContent = `${r.plot}: ${r.note}`; items.push(li); });
+    ul.replaceChildren(...items);
+  });
+
+  document.querySelectorAll('.fcd-reset').forEach((b) => b.addEventListener('click', () => F.setScope('all')));
+  document.querySelectorAll('.fcd [data-mode]').forEach((b) => b.addEventListener('click', () => {
+    F.state.mode = b.dataset.mode;
+    document.querySelectorAll('.fcd [data-mode]').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    dash.draw('plots');
+  }));
+  document.querySelectorAll('.fcd [data-sort]').forEach((b) => b.addEventListener('click', () => {
+    F.state.sort = b.dataset.sort;
+    document.querySelectorAll('.fcd [data-sort]').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    dash.draw('plots');
+  }));
+  document.querySelectorAll('.fcd th[data-k] button').forEach((b) => b.addEventListener('click', () => {
+    const th = b.closest('th'), k = th.dataset.k;
+    if (F.state.tKey === k) F.state.tDir = -F.state.tDir;
+    else { F.state.tKey = k; F.state.tDir = ['high', 'mid', 'low', 'none', 'total', 'water', 'baseline_n'].includes(k) ? -1 : 1; }
+    document.querySelectorAll('.fcd th[data-k]').forEach((x) => {
+      if (x === th) x.setAttribute('aria-sort', F.state.tDir > 0 ? 'ascending' : 'descending'); else x.removeAttribute('aria-sort');
+    });
+    dash.draw('table');
+  }));
+  document.querySelectorAll('#fcd-q').forEach((inp) => inp.addEventListener('input', () => {
+    F.state.q = inp.value;
+    dash.draw('table'); dash.draw('tcount');
+  }));
+</script>
