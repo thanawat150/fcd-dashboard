@@ -319,7 +319,7 @@ body { margin: 0; background: var(--color-bg); color: var(--color-fg); font: .87
   };
 
   async function loadCsv(path) {
-    const response = await fetch(path);
+    const response = await fetch(path, { cache: 'no-cache' });
     if (!response.ok) throw new Error(`${path}: HTTP ${response.status}`);
     const csv = (await response.text()).replace(/^\uFEFF/, '');
     const rows = [[]];
@@ -383,7 +383,7 @@ body { margin: 0; background: var(--color-bg); color: var(--color-fg); font: .87
     el.addEventListener('click', fn);
     el.addEventListener('keydown', (ev) => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); fn(); } });
   };
-  F.state.plot = '73-STC';
+  F.state.plot = '18-VSD';
   F.curPlot = () => {
     const rs = F.rows();
     if (!rs || !rs.length) return null;
@@ -651,9 +651,10 @@ body { margin: 0; background: var(--color-bg); color: var(--color-fg); font: .87
       a.textContent = 'เปิดรูปแผนที่ขนาดเต็มในแท็บใหม่';
       el.replaceChildren(img, a);
     }
-    if (img.getAttribute('src') !== r.map) { img.classList.add('loading'); img.setAttribute('src', r.map); }
+    const mapUrl = r.plot === '18-VSD' ? r.map + '?v=24b4ba5' : r.map;
+    if (img.getAttribute('src') !== mapUrl) { img.classList.add('loading'); img.setAttribute('src', mapUrl); }
     img.alt = `แผนที่การปกคลุมเรือนยอด (FCD) แปลง ${r.plot} จังหวัด${r.province}`;
-    a.href = r.map;
+    a.href = mapUrl;
   });
 
   F.blFor = (plot) => {
