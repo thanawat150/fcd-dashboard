@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>สรุปเนื้อที่ FCD</title>
+<title>แดชบอร์ดแผนที่แปลง | FCD และภาพโดรน</title>
 <style>
 :root {
   --color-bg: #f7f7f7; --color-panel: #fff; --color-fg: #191919;
@@ -115,18 +115,44 @@ body { margin: 0; background: var(--color-bg); color: var(--color-fg); font: .87
 @media (max-width: 30rem) { .hrow { grid-template-columns: 4.5rem minmax(0, 1fr) 4.5rem; } .fcd .hide-sm { display: none; } }
 [data-dash-source-state=refreshing] { opacity: .5; transition: opacity var(--cds-dur-slow); }
 </style>
+<link rel="stylesheet" href="map-review.css">
+<link rel="stylesheet" href="dashboard-theme.css">
 </head>
 <body>
 <main id="dash-root" aria-busy="true">
 <p id="data-status" role="status">กำลังโหลดข้อมูล FCD…</p>
 <noscript>เปิด JavaScript เพื่อแสดงข้อมูลและแผนที่ FCD</noscript>
 <div class="fcd">
-  <header class="fcd-head">
-    <h1 class="fcd-title">สรุปเนื้อที่ FCD</h1>
+  <header class="dashboard-hero" id="overview">
+    <div class="hero-copy">
+      <p class="hero-label"><span aria-hidden="true">◆</span> ข้อมูลเชิงพื้นที่</p>
+      <h1 class="fcd-title">แดชบอร์ดแผนที่แปลง</h1>
+      <p class="hero-description">สำรวจข้อมูลการปกคลุมเรือนยอด ภาพโดรน และขอบเขต PDD รายแปลง</p>
+      <div class="hero-actions">
+        <a class="hero-primary" href="#map">เปิดแผนที่รายแปลง <span aria-hidden="true">↓</span></a>
+        <button type="button" id="dashboard-download" disabled>ดาวน์โหลดภาพและข้อมูล</button>
+      </div>
+    </div>
+    <dl class="hero-stats" aria-label="จำนวนแปลงในชุดข้อมูลทั้งหมด">
+      <div><dt>แปลงทั้งหมด</dt><dd id="coverage-plots">—</dd></div>
+      <div><dt>มีภาพโดรน</dt><dd id="coverage-drone">—</dd></div>
+      <div><dt>มีข้อมูล FCD</dt><dd id="coverage-fcd">—</dd></div>
+    </dl>
+  </header>
+
+  <nav class="dashboard-nav" aria-label="ไปยังส่วนต่าง ๆ">
+    <a href="#fcd-overview">ภาพรวม FCD</a>
+    <a href="#map">แผนที่</a>
+    <a href="#by-province">กราฟรายจังหวัด</a>
+    <a href="#table">ตารางข้อมูล</a>
+  </nav>
+
+  <section class="fcd-head overview-summary" id="fcd-overview" aria-labelledby="fcd-overview-title">
+    <h2 id="fcd-overview-title">ภาพรวมการปกคลุมเรือนยอด</h2>
     <p class="fcd-take"><b data-draw="scopeName">—</b> มีเนื้อที่ FCD รวม <b data-draw="sum" data-source="summary" data-field="total" data-where="scope=all" data-fmt="rai">—</b> ไร่ จาก <b data-draw="sum" data-source="summary" data-field="plots" data-where="scope=all" data-fmt="int">—</b> แปลง เป็นระดับมาก <b data-draw="sum" data-source="summary" data-field="high_pct" data-where="scope=all" data-fmt="pct">—</b> ปานกลาง <b data-draw="sum" data-source="summary" data-field="mid_pct" data-where="scope=all" data-fmt="pct">—</b> น้อย <b data-draw="sum" data-source="summary" data-field="low_pct" data-where="scope=all" data-fmt="pct">—</b> และไม่ระบุระดับ <b data-draw="sum" data-source="summary" data-field="none_pct" data-where="scope=all" data-fmt="pct">—</b></p>
     <div class="fcd-comp" data-draw="comp" data-source="summary" role="img" aria-label="สัดส่วนเนื้อที่แต่ละระดับ">—</div>
     <p class="fcd-sub">เนื้อที่จากรูป FCD ที่ตัดตามขอบเขต "ใช้งาน" (1 ไร่ = 1,600 ม²) ไม่รวมแหล่งน้ำ</p>
-  </header>
+  </section>
 
   <div class="fcd-bar">
     <label for="fcd-scope">ดูข้อมูล</label>
@@ -167,6 +193,61 @@ body { margin: 0; background: var(--color-bg); color: var(--color-fg); font: .87
     </div>
   </section>
 
+  <div class="fcd-pair">
+  <section class="fcd-card" id="map">
+    <div class="fcd-card-head">
+      <h2>แผนที่รายแปลง</h2>
+      <p class="fcd-sub">เลือกแปลงเพื่อดู FCD ภาพโดรนล่าสุด หรือขอบเขต PDD บนภาพดาวเทียม</p>
+    </div>
+    <div class="fcd-tools">
+      <label class="fcd-sub" for="map-search">ค้นหาแปลง</label>
+      <input id="map-search" type="search" placeholder="รหัสแปลงหรือจังหวัด">
+      <label class="fcd-sub" for="fcd-pick">แปลง</label>
+      <select id="fcd-pick" class="dash-select fcd-pick" data-draw="mapPick" data-source="fcd" aria-label="เลือกแปลงที่จะดูแผนที่"></select>
+    </div>
+    <div class="fcd-tools" data-draw="mapModes"></div>
+    <p class="fcd-mapinfo" data-draw="mapInfo" data-source="fcd">—</p>
+    <div class="fcd-map" data-draw="map" data-source="fcd">—</div>
+    <div class="fcd-card-head" id="map-baseline">
+      <div class="fcd-tile-k">แปลง baseline ในแปลงนี้</div>
+      <p class="fcd-sub" data-draw="blNote" data-source="baseline">—</p>
+      <div class="fcd-tbox">
+        <table data-source="baseline" data-row-key="id">
+          <thead><tr>
+            <th data-field="baseline"><span class="th-t">แปลง</span></th>
+            <th data-field="fcd_level"><span class="th-t">ระดับ FCD</span></th>
+            <th data-field="rai" class="n"><span class="th-t">เนื้อที่ (ไร่)</span></th>
+            <th data-field="E" class="n"><span class="th-t">E</span></th>
+            <th data-field="N" class="n"><span class="th-t">N</span></th>
+          </tr></thead>
+          <tbody data-draw="blTable"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+  <section class="fcd-card" id="by-plot">
+    <div class="fcd-card-head">
+      <h2>เนื้อที่แต่ละระดับ รายแปลง</h2>
+      <p class="fcd-sub">ดูเป็นไร่เพื่อเทียบขนาดแปลง หรือร้อยละเพื่อเทียบสัดส่วนระดับในแต่ละแปลง กดที่แท่งเพื่อเปิดแผนที่แปลงนั้น</p>
+    </div>
+    <div class="fcd-tools">
+      <div class="fcd-seg" role="group" aria-label="หน่วย">
+        <button type="button" data-mode="rai" aria-pressed="true">ไร่</button>
+        <button type="button" data-mode="pct" aria-pressed="false">ร้อยละ</button>
+      </div>
+      <div class="fcd-seg" role="group" aria-label="เรียงตาม">
+        <button type="button" data-sort="total" aria-pressed="true">เนื้อที่รวม</button>
+        <button type="button" data-sort="high_pct" aria-pressed="false">สัดส่วนมาก</button>
+        <button type="button" data-sort="low_pct" aria-pressed="false">สัดส่วนน้อย+ไม่ระบุ</button>
+        <button type="button" data-sort="plot" aria-pressed="false">รหัสแปลง</button>
+      </div>
+      <div class="fcd-legend"><span><i class="sw sw-high"></i>มาก</span><span><i class="sw sw-mid"></i>ปานกลาง</span><span><i class="sw sw-low"></i>น้อย</span><span><i class="sw sw-none"></i>ไม่ระบุระดับ</span></div>
+    </div>
+    <div class="fcd-scroll"><div class="fcd-chart" data-draw="plots" data-source="fcd">—</div></div>
+  </section>
+
+  </div>
+
   <div class="fcd-grid">
     <section class="fcd-card" id="by-province">
       <div class="fcd-card-head">
@@ -206,62 +287,10 @@ body { margin: 0; background: var(--color-bg); color: var(--color-fg); font: .87
     </section>
   </div>
 
-  <div class="fcd-pair">
-  <section class="fcd-card" id="by-plot">
-    <div class="fcd-card-head">
-      <h2>เนื้อที่แต่ละระดับ รายแปลง</h2>
-      <p class="fcd-sub">ดูเป็นไร่เพื่อเทียบขนาดแปลง หรือร้อยละเพื่อเทียบสัดส่วนระดับในแต่ละแปลง กดที่แท่งเพื่อเปิดแผนที่แปลงนั้น</p>
-    </div>
-    <div class="fcd-tools">
-      <div class="fcd-seg" role="group" aria-label="หน่วย">
-        <button type="button" data-mode="rai" aria-pressed="true">ไร่</button>
-        <button type="button" data-mode="pct" aria-pressed="false">ร้อยละ</button>
-      </div>
-      <div class="fcd-seg" role="group" aria-label="เรียงตาม">
-        <button type="button" data-sort="total" aria-pressed="true">เนื้อที่รวม</button>
-        <button type="button" data-sort="high_pct" aria-pressed="false">สัดส่วนมาก</button>
-        <button type="button" data-sort="low_pct" aria-pressed="false">สัดส่วนน้อย+ไม่ระบุ</button>
-        <button type="button" data-sort="plot" aria-pressed="false">รหัสแปลง</button>
-      </div>
-      <div class="fcd-legend"><span><i class="sw sw-high"></i>มาก</span><span><i class="sw sw-mid"></i>ปานกลาง</span><span><i class="sw sw-low"></i>น้อย</span><span><i class="sw sw-none"></i>ไม่ระบุระดับ</span></div>
-    </div>
-    <div class="fcd-scroll"><div class="fcd-chart" data-draw="plots" data-source="fcd">—</div></div>
-  </section>
-
-  <section class="fcd-card" id="map">
-    <div class="fcd-card-head">
-      <h2>แผนที่ FCD</h2>
-      <p class="fcd-sub">แปลงที่มีแปลง baseline ใช้แผนที่ชุด FCD + แปลง baseline (กรอบฟ้า BL-n) แปลงอื่นใช้แผนที่ FCD เดิม ลายเส้นเขียว เหลือง แดง คือระดับมาก ปานกลาง น้อย เส้นแดงทึบคือขอบเขตพื้นที่โครงการ เลือกแปลงจากรายการ หรือกดที่แท่งหรือแถวในตาราง</p>
-    </div>
-    <div class="fcd-tools">
-      <label class="fcd-sub" for="fcd-pick">แปลง</label>
-      <select id="fcd-pick" class="dash-select fcd-pick" data-draw="mapPick" data-source="fcd" aria-label="เลือกแปลงที่จะดูแผนที่"></select>
-    </div>
-    <p class="fcd-mapinfo" data-draw="mapInfo" data-source="fcd">—</p>
-    <div class="fcd-map" data-draw="map" data-source="fcd">—</div>
-    <div class="fcd-card-head" id="map-baseline">
-      <div class="fcd-tile-k">แปลง baseline ในแปลงนี้</div>
-      <p class="fcd-sub" data-draw="blNote" data-source="baseline">—</p>
-      <div class="fcd-tbox">
-        <table data-source="baseline" data-row-key="id">
-          <thead><tr>
-            <th data-field="baseline"><span class="th-t">แปลง</span></th>
-            <th data-field="fcd_level"><span class="th-t">ระดับ FCD</span></th>
-            <th data-field="rai" class="n"><span class="th-t">เนื้อที่ (ไร่)</span></th>
-            <th data-field="E" class="n"><span class="th-t">E</span></th>
-            <th data-field="N" class="n"><span class="th-t">N</span></th>
-          </tr></thead>
-          <tbody data-draw="blTable"></tbody>
-        </table>
-      </div>
-    </div>
-  </section>
-  </div>
-
   <section class="fcd-card" id="table">
     <div class="fcd-card-head">
       <h2>ตารางรายแปลง</h2>
-      <p class="fcd-sub">กดหัวคอลัมน์เพื่อเรียง ดาวน์โหลดเป็น CSV ได้จากเมนู Sources</p>
+      <p class="fcd-sub">กดหัวคอลัมน์เพื่อเรียง หรือใช้ปุ่มดาวน์โหลดภาพและข้อมูลเพื่อรับ CSV</p>
     </div>
     <div class="fcd-tools">
       <input id="fcd-q" class="fcd-search" type="search" placeholder="ค้นหารหัสแปลง จังหวัด หรือเล่ม" aria-label="ค้นหาในตาราง">
@@ -337,13 +366,20 @@ body { margin: 0; background: var(--color-bg); color: var(--color-fg); font: .87
   async function startDashboard() {
     const status = document.getElementById('data-status');
     try {
-      const [fcd, baseline] = await Promise.all([loadCsv('fcd_dashboard.csv'), loadCsv('baseline.csv')]);
+      const [fcd, baseline, maps] = await Promise.all([loadCsv('fcd_dashboard.csv'), loadCsv('baseline.csv'), loadCsv('plot_maps.csv')]);
+      document.getElementById('coverage-plots').textContent = F.int(maps.length);
+      document.getElementById('coverage-drone').textContent = F.int(maps.filter((row) => row.drone).length);
+      document.getElementById('coverage-fcd').textContent = F.int(fcd.length);
+      sources.set('maps', { status: 'ok', data: maps });
       sources.set('fcd', { status: 'ok', data: fcd });
       sources.set('baseline', { status: 'ok', data: baseline });
       calculations.forEach(({ inputs, fn }, name) => {
         sources.set(name, { status: 'ok', data: fn(...inputs.map((input) => dash.data(input).data)) });
       });
       renderers.forEach((_, name) => dash.draw(name));
+      const download = document.getElementById('dashboard-download');
+      download.onclick = () => openDashboardDownload({ maps, fcd, baseline, current: F.curPlot(), scoped: F.mapRows() });
+      download.disabled = false;
       status.hidden = true;
     } catch (error) {
       status.textContent = 'โหลดข้อมูล FCD ไม่สำเร็จ กรุณาเปิดผ่านลิงก์เว็บไซต์แล้วลองใหม่';
@@ -375,7 +411,7 @@ body { margin: 0; background: var(--color-bg); color: var(--color-fg); font: .87
   };
   F.redraw = () => {
     document.querySelectorAll('.fcd-reset').forEach((b) => { b.hidden = F.state.scope === 'all'; });
-    ['sum', 'comp', 'meter', 'scopeName', 'prov', 'plots', 'rank', 'table', 'tcount', 'scope', 'mapPick', 'mapInfo', 'map', 'blNote', 'blTable', 'blHead', 'blSum'].forEach((n) => dash.draw(n));
+    ['sum', 'comp', 'meter', 'scopeName', 'prov', 'plots', 'rank', 'table', 'tcount', 'scope', 'mapPick', 'mapModes', 'mapInfo', 'map', 'blNote', 'blTable', 'blHead', 'blSum'].forEach((n) => dash.draw(n));
   };
   F.setScope = (s) => { F.state.scope = s || 'all'; F.redraw(); };
   F.keyPick = (el, fn) => {
@@ -385,15 +421,15 @@ body { margin: 0; background: var(--color-bg); color: var(--color-fg); font: .87
   };
   F.state.plot = '18-VSD';
   F.curPlot = () => {
-    const rs = F.rows();
-    if (!rs || !rs.length) return null;
+    const rs = F.mapRows();
+    if (!rs.length) return null;
     const hit = rs.find((r) => r.plot === F.state.plot);
     if (hit) return hit;
     return rs.slice().sort((a, b) => F.plotNum(a.plot) - F.plotNum(b.plot))[0];
   };
   F.pick = (plot) => {
     F.state.plot = plot;
-    ['mapPick', 'mapInfo', 'map', 'plots', 'table', 'blNote', 'blTable'].forEach((n) => dash.draw(n));
+    ['mapPick', 'mapModes', 'mapInfo', 'map', 'plots', 'table', 'blNote', 'blTable'].forEach((n) => dash.draw(n));
   };
 
   dash.calc('summary', {
@@ -619,43 +655,115 @@ body { margin: 0; background: var(--color-bg); color: var(--color-fg); font: .87
     el.textContent = rs ? F.int(rs.length) : '—';
   });
 
+  const mapLabels = { fcd: 'FCD', drone: 'ภาพโดรน', pdd: 'ขอบเขต PDD · ภาพดาวเทียม' };
+  F.mapRows = () => (dash.data('maps').data || []).filter(F.inScope);
+  F.availableMaps = (row) => Object.keys(mapLabels).filter((kind) => row[kind]);
+  F.activeMap = (row) => {
+    const kinds = F.availableMaps(row);
+    return kinds.includes(F.state.mapMode) ? F.state.mapMode : kinds[0];
+  };
+
   dash.draw('mapPick', (sel) => {
-    const rs = F.rows();
-    if (!rs) { sel.replaceChildren(); return; }
-    const sorted = rs.slice().sort((a, b) => F.plotNum(a.plot) - F.plotNum(b.plot) || a.plot.localeCompare(b.plot));
-    sel.replaceChildren(...sorted.map((r) => new Option(`${r.plot} · ${r.province}`, r.plot)));
+    const query = document.getElementById('map-search').value.trim().toLowerCase();
     const cur = F.curPlot();
-    sel.value = cur ? cur.plot : '';
+    const sorted = F.mapRows().filter((r) => (r.plot + ' ' + r.province).toLowerCase().includes(query))
+      .sort((a, b) => F.plotNum(a.plot) - F.plotNum(b.plot) || a.plot.localeCompare(b.plot));
+    sel.replaceChildren(...sorted.map((r) => new Option(
+      r.plot + ' · ' + r.province + ' · ' + F.availableMaps(r).map((kind) => mapLabels[kind]).join(' + '), r.plot)));
+    if (!sorted.length) sel.append(new Option('ไม่พบแปลง', ''));
+    sel.value = cur?.plot || '';
+    if (!sel.value && sorted.length) {
+      const prompt = new Option('เลือกแปลงจากผลค้นหา', '');
+      prompt.disabled = true;
+      sel.prepend(prompt);
+      sel.value = '';
+    }
     sel.onchange = () => F.pick(sel.value);
+  });
+
+  dash.draw('mapModes', (el) => {
+    const r = F.curPlot();
+    el.replaceChildren();
+    if (!r) return;
+    const group = document.createElement('div');
+    group.className = 'fcd-seg';
+    group.setAttribute('role', 'group');
+    group.setAttribute('aria-label', 'ชนิดแผนที่');
+    for (const kind of F.availableMaps(r)) {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.textContent = mapLabels[kind];
+      button.setAttribute('aria-pressed', String(kind === F.activeMap(r)));
+      button.onclick = () => {
+        F.state.mapMode = kind;
+        ['mapModes', 'mapInfo', 'map', 'blNote', 'blTable'].forEach((name) => dash.draw(name));
+        el.querySelector('[aria-pressed=true]')?.focus();
+      };
+      group.append(button);
+    }
+    el.append(group);
   });
 
   dash.draw('mapInfo', (el) => {
     const r = F.curPlot();
+    document.getElementById('map-baseline').hidden = !r || F.activeMap(r) !== 'fcd';
     if (!r) { el.textContent = '—'; return; }
-    el.textContent = `${r.plot} · จังหวัด${r.province} · ${r.book} · รวม ${F.rai(F.n(r.total))} ไร่ (มาก ${F.rai(F.n(r.high))} · ปานกลาง ${F.rai(F.n(r.mid))} · น้อย ${F.rai(F.n(r.low))} · ไม่ระบุ ${F.rai(F.n(r.none))})`;
+    const kind = F.activeMap(r);
+    const heading = r.plot + ' · จังหวัด' + r.province;
+    if (kind === 'drone') {
+      const date = new Intl.DateTimeFormat('th-TH', { dateStyle: 'long', timeZone: 'UTC' }).format(new Date(r.flight_date));
+      el.textContent = heading + ' · วันที่บิน ' + date + (r.source_note ? ' · ' + r.source_note : '');
+      return;
+    }
+    if (kind === 'pdd') { el.textContent = heading + ' · ' + mapLabels.pdd; return; }
+    const data = dash.data('fcd').data.find((row) => row.plot === r.plot);
+    el.textContent = heading + ' · ' + data.book + ' · รวม ' + F.rai(F.n(data.total)) + ' ไร่ (' +
+      F.LV.map(([key, label]) => label + ' ' + F.rai(F.n(data[key]))).join(' · ') + ')';
   });
 
   dash.draw('map', (el) => {
     const r = F.curPlot();
-    el.classList.toggle('dash-skeleton', dash.data('fcd').status === 'loading');
-    if (!r) { el.textContent = '—'; return; }
-    if (!r.map) { el.textContent = 'ยังไม่มีรูปแผนที่ของแปลงนี้'; return; }
-    let img = el.querySelector('img'), a = el.querySelector('a');
-    if (!img) {
-      img = document.createElement('img');
-      img.decoding = 'async';
-      img.addEventListener('load', () => img.classList.remove('loading'));
-      img.addEventListener('error', () => img.classList.remove('loading'));
-      a = document.createElement('a');
-      a.target = '_blank'; a.rel = 'noopener';
-      a.textContent = 'เปิดรูปแผนที่ขนาดเต็มในแท็บใหม่';
-      el.replaceChildren(img, a);
-    }
-    const mapUrl = r.plot === '18-VSD' ? r.map + '?v=24b4ba5' : r.map;
-    if (img.getAttribute('src') !== mapUrl) { img.classList.add('loading'); img.setAttribute('src', mapUrl); }
-    img.alt = `แผนที่การปกคลุมเรือนยอด (FCD) แปลง ${r.plot} จังหวัด${r.province}`;
-    a.href = mapUrl;
+    if (!r) { el.textContent = 'ไม่พบแผนที่ในขอบเขตนี้'; return; }
+    const kind = F.activeMap(r);
+    const img = document.createElement('img');
+    img.decoding = 'async';
+    img.alt = mapLabels[kind] + ' แปลง ' + r.plot;
+    img.src = r[kind];
+    const status = document.createElement('p');
+    status.setAttribute('role', 'status');
+    img.onerror = () => { img.hidden = true; status.textContent = 'เปิดภาพแผนที่ไม่ได้'; };
+    const link = document.createElement('a');
+    link.target = '_blank';
+    link.rel = 'noopener';
+    const pdf = kind === 'drone' ? r.drone_pdf : '';
+    link.href = pdf || img.src;
+    link.textContent = pdf ? 'เปิด PDF แผนที่รายแปลง' : 'เปิดรูปแผนที่ขนาดเต็ม';
+    if (pdf) link.onclick = async (event) => {
+      event.preventDefault();
+      const tab = window.open('about:blank', '_blank');
+      if (tab) tab.opener = null;
+      try {
+        if (!(await fetch(pdf, { method: 'HEAD' })).ok) throw new Error();
+        if (tab) tab.location.href = link.href;
+        else window.location.href = link.href;
+      } catch {
+        tab?.close();
+        status.textContent = 'เปิดไฟล์ PDF ไม่ได้';
+      }
+    };
+    const review = document.createElement('button');
+    review.type = 'button';
+    review.textContent = 'ตรวจแผนที่ / วงจุดแก้ไข';
+    review.onclick = () => openMapReview({
+      plot: r.plot, province: r.province, kind: mapLabels[kind], src: img.src,
+    });
+    const actions = document.createElement('div');
+    actions.className = 'map-actions';
+    actions.append(review, link);
+    el.replaceChildren(actions, img, status);
   });
+
+  document.getElementById('map-search').addEventListener('input', () => dash.draw('mapPick'));
 
   F.blFor = (plot) => {
     const b = dash.data('baseline');
@@ -760,5 +868,7 @@ body { margin: 0; background: var(--color-bg); color: var(--color-fg); font: .87
   }));
   startDashboard();
 </script>
+<script src="map-review.js"></script>
+<script src="dashboard-download.js"></script>
 </body>
 </html>

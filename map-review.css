@@ -1,0 +1,47 @@
+.map-review {
+  width: min(1050px, 96vw);
+  max-width: 96vw;
+  max-height: 94vh;
+  padding: 14px;
+  border: 1px solid #bcc6ce;
+  border-radius: 10px;
+  background: #fff;
+  color: #172033;
+  font: 15px system-ui, sans-serif;
+}
+.map-review::backdrop { background: #152236b0; }
+.map-review header, .review-tools, .review-notes li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.map-review header { justify-content: space-between; }
+.review-tools { margin: 10px 0; }
+.map-review button, .fcd-map > button {
+  font: inherit;
+  padding: 6px 10px;
+  border: 1px solid #9aa9b7;
+  border-radius: 5px;
+  background: #fff;
+  color: #172033;
+  cursor: pointer;
+}
+.map-review button[aria-pressed="true"] { background: #213850; color: white; }
+.map-review button:disabled { opacity: .5; cursor: default; }
+.map-review canvas {
+  display: block;
+  width: 100%;
+  height: clamp(190px, 53vh, 570px);
+  background: #e5eaf0;
+  touch-action: none;
+  cursor: grab;
+}
+.map-review canvas.marking { cursor: crosshair; }
+.map-review form { margin-top: 8px; }
+.map-review textarea { width: min(100%, 40rem); font: inherit; resize: vertical; }
+.map-review form textarea { display: block; margin: 4px 0; }
+.review-notes ol { padding-left: 0; margin: 6px 0; }
+.review-notes li { margin: 6px 0; }
+.review-notes li textarea { flex: 1 1 180px; }
+.fcd-map > button { margin: 5px 8px 5px 0; }
