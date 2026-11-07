@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f5f7f9">
+<title>Checklist แผนที่ของฉัน | FCD Dashboard</title>
+<style>
+:root{font-family:system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;color:#243342;background:#f5f7f9;font-synthesis:none}
+*{box-sizing:border-box}body{margin:0}button,input,select,textarea{font:inherit}button{cursor:pointer}
+a{color:#235b89}header{padding:22px max(16px,calc((100vw - 1450px)/2));background:#fff;border-bottom:1px solid #d9e1e6}
+h1{font-size:clamp(1.55rem,4vw,2.2rem);margin:10px 0 5px;font-weight:750}
+header p{margin:0;color:#63717b;line-height:1.55}.link{font-size:.85rem}
+main{max-width:1470px;padding:20px 16px 60px;margin:auto}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:0 0 18px}
+.stat{border:1px solid #dce4e9;border-radius:14px;background:#fff;padding:15px}
+.stat strong{display:block;font-size:clamp(1.6rem,3vw,2.1rem);font-variant-numeric:tabular-nums}
+.stat span{font-size:.83rem;color:#667783}
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;background:#fff;border:1px solid #dce4e9;padding:12px;border-radius:14px;margin-bottom:12px}
+.toolbar input,.toolbar select,.edit select,.edit textarea{background:#fff;color:#243342;border:1px solid #cbd6de;border-radius:9px;padding:10px;width:100%;min-width:0}
+.toolbar label{font-size:.82rem;color:#536674;flex:1 1 180px;display:grid;gap:5px}
+.toolbar .search{flex:2 1 240px}.act{border:1px solid #cad7df;background:#fff;color:#254d69;border-radius:9px;padding:10px 12px;white-space:nowrap}
+.act:hover{background:#f0f6fa}.actions{display:flex;gap:7px;flex-wrap:wrap}
+.note{background:#eef4f8;padding:11px 13px;border-radius:9px;margin:12px 0 20px;font-size:.86rem;color:#3d5a6d}
+.results{font-size:.85rem;color:#60717c;margin:0 0 12px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,305px),1fr));gap:16px}
+.card{border:1px solid #dce4e9;border-radius:15px;background:#fff;overflow:hidden;display:flex;flex-direction:column;min-width:0}
+.card.done{border-color:#94c9ab}.head{padding:13px 14px 10px;display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.head h2{font-size:1.1rem;margin:0}.head small{display:block;color:#69808d;font-size:.82rem;margin-top:2px}
+.pill{font-size:.74rem;padding:4px 8px;border-radius:99px;background:#eff2f5;color:#51616b;white-space:nowrap}
+.pill.done{background:#e5f5e9;color:#286b3b}.pill.fix{background:#fff2dd;color:#956321}
+.map{display:block;position:relative;margin:0 12px;border-radius:9px;overflow:hidden;border:1px solid #e1e7eb;background:#e9edf0;height:260px;text-align:center}
+.map img{width:100%;height:100%;object-fit:contain;background:white}
+.map .missing{height:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:10px;color:#637783;padding:20px}
+.map .missing strong{font-size:1.1rem}
+.map .zoom{position:absolute;right:8px;bottom:8px;background:#fffef0;padding:5px 9px;border-radius:8px;font-size:.74rem;color:#354758}
+.edit{padding:12px 14px 14px;display:grid;gap:10px;margin-top:auto}
+.edit label{display:grid;gap:5px;font-size:.83rem;font-weight:600;color:#526472}
+.edit textarea{resize:vertical;min-height:55px;font-size:.84rem}
+.info{font-size:.74rem;color:#71808d;line-height:1.4}
+.empty{background:#fff;border:1px solid #dce4e9;border-radius:14px;padding:24px}
+footer{color:#758692;text-align:center;padding:24px 12px;font-size:.8rem}
+@media(max-width:680px){header{padding:16px}main{padding:12px 12px 35px}.stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.stat{padding:10px}.card .map{height:330px}.actions{width:100%}.actions .act{flex:1 1 auto}}
+</style>
+</head>
+<body>
+<header>
+  <div class="link"><a href="./">← กลับ FCD Dashboard</a></div>
+  <h1>Checklist แผนที่ของฉัน</h1>
+  <p>เปิดดูแผนที่ทุกแปลง แล้วเลือกเองว่ามีจุดปลูกหรือไม่ พร้อมติ๊กความคืบหน้าของงาน</p>
+</header>
+<main>
+  <section class="stats" aria-label="สรุปความคืบหน้า">
+    <div class="stat"><strong id="total">—</strong><span>แปลงที่รับผิดชอบ</span></div>
+    <div class="stat"><strong id="complete">0</strong><span>ทำเสร็จที่ฉันติ๊กไว้</span></div>
+    <div class="stat"><strong id="remaining">—</strong><span>ยังไม่ติ๊กว่าเสร็จ</span></div>
+    <div class="stat"><strong id="maps">—</strong><span>มีภาพแผนที่จาก FCD</span></div>
+  </section>
+  <section class="toolbar">
+    <label class="search">ค้นหารหัสแปลงหรือจังหวัด<input id="search" type="search" placeholder="เช่น 52-STC หรือ กระบี่"></label>
+    <label>จังหวัด<select id="province"><option value="">ทุกจังหวัด</option></select></label>
+    <label>สถานะงาน<select id="status"><option value="">ทุกสถานะ</option><option value="todo">ยังไม่ทำ</option><option value="progress">กำลังทำ</option><option value="done">เสร็จแล้ว</option></select></label>
+    <label>จุดปลูก<select id="planting"><option value="">ทุกแบบ</option><option value="unknown">ยังไม่ระบุ</option><option value="yes">มีจุดปลูก</option><option value="no">ไม่มีจุดปลูก</option></select></label>
+    <label>ภาพแผนที่<select id="hasmap"><option value="">ทุกแปลง</option><option value="yes">มีภาพ</option><option value="no">ยังไม่มีภาพ</option></select></label>
+    <div class="actions">
+      <button class="act" id="export" type="button">ส่งออกข้อมูลสำรอง</button>
+      <button class="act" id="import" type="button">นำเข้าข้อมูล</button>
+      <input id="importfile" type="file" accept=".json,application/json" hidden>
+    </div>
+  </section>
+  <p class="note"><b>ข้อมูลส่วนตัว:</b> การติ๊กและบันทึกหมายเหตุจะเก็บไว้เฉพาะในเบราว์เซอร์ของเครื่องนี้ ไม่ได้อัปเดต Google Sheets หรือ GitHub อัตโนมัติ และอาจหายได้หากล้างข้อมูลเว็บไซต์ ควรกด “ส่งออกข้อมูลสำรอง” เป็นระยะ</p>
+  <div class="results" id="results" role="status"></div>
+  <section class="cards" id="cards" aria-label="รายการแปลง"></section>
+</main>
+<footer>ข้อมูลรหัสแปลงจากตารางคุมปีที่ 4 • ภาพแผนที่จาก FCD Dashboard • สถานะและจุดปลูกกำหนดโดยผู้ใช้เอง</footer>
+<script>
+"use strict";
+const plots=[{"id":"38-STC","province":"กระบี่","map":"maps/38-STC.jpg"},{"id":"39-STC","province":"กระบี่","map":"maps/39-STC.jpg"},{"id":"41-STC","province":"กระบี่","map":"maps/41-STC.jpg"},{"id":"43-STC","province":"กระบี่","map":"maps/43-STC.jpg"},{"id":"44-STC","province":"กระบี่","map":"maps/44-STC.jpg"},{"id":"45-STC","province":"กระบี่","map":"maps/45-STC.jpg"},{"id":"46-STC","province":"กระบี่","map":"maps/46-STC.jpg"},{"id":"47-STC","province":"กระบี่","map":"maps/47-STC.jpg"},{"id":"48-STC","province":"กระบี่","map":"maps/48-STC.jpg"},{"id":"49-STC","province":"กระบี่","map":"maps/49-STC.jpg"},{"id":"50-STC","province":"กระบี่","map":"maps/50-STC.jpg"},{"id":"51-STC","province":"กระบี่","map":"maps/51-STC.jpg"},{"id":"52-STC","province":"กระบี่","map":"maps/52-STC.jpg"},{"id":"53-STC","province":"กระบี่","map":"maps/53-STC.jpg"},{"id":"54-STC","province":"กระบี่","map":"maps/54-STC.jpg"},{"id":"55-STC","province":"กระบี่","map":"maps/55-STC.jpg"},{"id":"56(1)-STC","province":"กระบี่","map":null},{"id":"57(1)-STC","province":"กระบี่","map":null},{"id":"58(1)-STC","province":"กระบี่","map":null},{"id":"59-STC","province":"กระบี่","map":"maps/59-STC.jpg"},{"id":"60(1)-STC","province":"กระบี่","map":null},{"id":"62-STC","province":"กระบี่","map":"maps/62-STC.jpg"},{"id":"63-STC","province":"กระบี่","map":"maps/63-STC.jpg"},{"id":"64-STC","province":"กระบี่","map":"maps/64-STC.jpg"},{"id":"65-STC","province":"กระบี่","map":"maps/65-STC.jpg"},{"id":"96-VSD","province":"กระบี่","map":null},{"id":"97-VSD","province":"กระบี่","map":"maps/97-VSD.jpg"},{"id":"98-VSD","province":"กระบี่","map":"maps/98-VSD.jpg"},{"id":"99-VSD","province":"กระบี่","map":"maps/99-VSD.jpg"},{"id":"101(1)-VSD","province":"กระบี่","map":"maps/101(1)-VSD.jpg"},{"id":"105-VSD","province":"กระบี่","map":"maps/105-VSD.jpg"},{"id":"18-VSD","province":"ชุมพร","map":"maps/18-VSD.jpg"},{"id":"19-VSD","province":"ชุมพร","map":"maps/19-VSD.jpg"},{"id":"19(1)-VSD","province":"ชุมพร","map":"maps/19(1)-VSD.jpg"},{"id":"58-VSD","province":"ตรัง","map":null},{"id":"66(1)-STC","province":"ประจวบคีรีขันธ์","map":null},{"id":"88-VSD","province":"ปัตตานี","map":"maps/88-VSD.jpg"},{"id":"89-VSD","province":"ปัตตานี","map":"maps/89-VSD.jpg"},{"id":"90-VSD","province":"ปัตตานี","map":"maps/90-VSD.jpg"},{"id":"93-VSD","province":"ปัตตานี","map":"maps/93-VSD.jpg"},{"id":"94-VSD","province":"ปัตตานี","map":"maps/94-VSD.jpg"},{"id":"95-VSD","province":"ปัตตานี","map":"maps/95-VSD.jpg"},{"id":"24-VSD","province":"พังงา","map":null},{"id":"25-VSD","province":"พังงา","map":null},{"id":"27-VSD","province":"พังงา","map":null},{"id":"28-VSD","province":"พังงา","map":null},{"id":"29-VSD","province":"พังงา","map":null},{"id":"30-VSD","province":"พังงา","map":null},{"id":"31-STC","province":"พังงา","map":null},{"id":"31-VSD","province":"พังงา","map":null},{"id":"32-VSD","province":"พังงา","map":null},{"id":"33-VSD","province":"พังงา","map":null},{"id":"34-VSD","province":"พังงา","map":null},{"id":"35-VSD","province":"พังงา","map":null},{"id":"37-VSD","province":"พังงา","map":null},{"id":"38-VSD","province":"พังงา","map":null},{"id":"39-VSD","province":"พังงา","map":null},{"id":"40-VSD","province":"พังงา","map":"maps/40-VSD.jpg"},{"id":"41-VSD","province":"พังงา","map":"maps/41-VSD.jpg"},{"id":"42-VSD","province":"พังงา","map":"maps/42-VSD.jpg"},{"id":"43-VSD","province":"พังงา","map":"maps/43-VSD.jpg"},{"id":"44-VSD","province":"พังงา","map":"maps/44-VSD.jpg"},{"id":"69-STC","province":"พังงา","map":"maps/69-STC.jpg"},{"id":"70-STC","province":"พังงา","map":"maps/70-STC.jpg"},{"id":"71-STC","province":"พังงา","map":"maps/71-STC.jpg"},{"id":"72-STC","province":"พังงา","map":"maps/72-STC.jpg"},{"id":"73-STC","province":"พังงา","map":"maps/73-STC.jpg"},{"id":"74-STC","province":"พังงา","map":"maps/74-STC.jpg"},{"id":"75-STC","province":"พังงา","map":"maps/75-STC.jpg"},{"id":"76-STC","province":"พังงา","map":"maps/76-STC.jpg"},{"id":"77-STC","province":"พังงา","map":"maps/77-STC.jpg"},{"id":"78-STC","province":"ภูเก็ต","map":"maps/78-STC.jpg"},{"id":"79-STC","province":"ภูเก็ต","map":"maps/79-STC.jpg"},{"id":"80-STC","province":"ภูเก็ต","map":"maps/80-STC.jpg"},{"id":"102-VSD","province":"ภูเก็ต","map":"maps/102-VSD.jpg"},{"id":"81-STC","province":"ระนอง","map":"maps/81-STC.jpg"},{"id":"85-VSD","province":"สตูล","map":"maps/85-VSD.jpg"},{"id":"86-VSD","province":"สตูล","map":"maps/86-VSD.jpg"},{"id":"88-STC","province":"สตูล","map":"maps/88-STC.jpg"},{"id":"89-STC","province":"สตูล","map":"maps/89-STC.jpg"},{"id":"90-STC","province":"สตูล","map":"maps/90-STC.jpg"},{"id":"90(1)-STC","province":"สตูล","map":"maps/90(1)-STC.jpg"}];
+const KEY="fcd-ken-personal-checklist-v1";
+const states={todo:"ยังไม่ทำ",progress:"กำลังทำ",done:"เสร็จแล้ว"};
+const plants={unknown:"ยังไม่ระบุ",yes:"มีจุดปลูก",no:"ไม่มีจุดปลูก"};
+const $=id=>document.getElementById(id);
+let saved={};
+try{const v=JSON.parse(localStorage.getItem(KEY)||"{}");if(v&&typeof v==="object")saved=v;}catch(e){console.warn("Cannot read stored checklist",e);}
+function current(id){const r=saved[id]||{};return {status:states[r.status]?r.status:"todo",planting:plants[r.planting]?r.planting:"unknown",note:typeof r.note==="string"?r.note:""};}
+function persist(){try{localStorage.setItem(KEY,JSON.stringify(saved));}catch(e){alert("เบราว์เซอร์นี้บันทึกข้อมูลไม่ได้ กรุณาส่งออกข้อมูลสำรอง");}}
+function change(id,key,value){const v=current(id);v[key]=value;saved[id]=v;persist();updateStats();const card=document.querySelector('[data-plot="'+CSS.escape(id)+'"]');if(card){card.classList.toggle("done",v.status==="done");const pill=card.querySelector(".pill");pill.textContent=states[v.status];pill.className="pill"+(v.status==="done"?" done":v.status==="progress"?" fix":"");} }
+function option(select,value,label){const o=document.createElement("option");o.value=value;o.textContent=label;select.append(o);}
+function el(tag,cls,txt){const e=document.createElement(tag);if(cls)e.className=cls;if(txt!==undefined)e.textContent=txt;return e;}
+function renderCard(p){
+  const v=current(p.id),card=el("article","card"+(v.status==="done"?" done":""));card.dataset.plot=p.id;
+  const head=el("div","head"),txt=el("div");const title=el("h2","",p.id);txt.append(title,el("small","",p.province));
+  const pill=el("span","pill"+(v.status==="done"?" done":v.status==="progress"?" fix":""),states[v.status]);head.append(txt,pill);card.append(head);
+  if(p.map){
+    const link=el("a","map");link.href="./"+p.map.split("/").map(encodeURIComponent).join("/");link.target="_blank";link.rel="noopener";link.setAttribute("aria-label","เปิดภาพแผนที่ "+p.id+" แบบเต็ม");
+    const img=el("img");img.loading="lazy";img.decoding="async";img.alt="ภาพแผนที่ FCD แปลง "+p.id;img.src=link.href;
+    img.addEventListener("error",()=>{link.replaceChildren(el("div","missing","ภาพแผนที่ไม่สามารถโหลดได้"));});
+    link.append(img,el("span","zoom","เปิดภาพขยาย ↗"));card.append(link);
+  }else{
+    const missing=el("div","map"),content=el("div","missing");content.append(el("strong","", "ยังไม่มีภาพแผนที่"),el("span","", "ไม่พบไฟล์ภาพของรหัสนี้ใน GitHub FCD"));missing.append(content);card.append(missing);
+  }
+  const form=el("div","edit");
+  const l1=el("label","", "สถานะงาน");const s1=el("select");
+  Object.entries(states).forEach(([k,n])=>option(s1,k,n));s1.value=v.status;s1.addEventListener("change",()=>{change(p.id,"status",s1.value); if($("status").value)render();});l1.append(s1);
+  const l2=el("label","", "จุดปลูก (เลือกเอง)");const s2=el("select");
+  Object.entries(plants).forEach(([k,n])=>option(s2,k,n));s2.value=v.planting;s2.addEventListener("change",()=>{change(p.id,"planting",s2.value);if($("planting").value)render();});l2.append(s2);
+  const l3=el("label","", "บันทึกส่วนตัว");const note=el("textarea");note.placeholder="เช่น ตรวจแล้ว ไม่มีจุดปลูก หรือรอข้อมูลภาพ";note.value=v.note;note.rows=2;
+  note.addEventListener("input",()=>change(p.id,"note",note.value));l3.append(note);
+  form.append(l1,l2,l3);card.append(form);return card;
+}
+function updateStats(){
+  $("total").textContent=plots.length;
+  const done=plots.filter(p=>current(p.id).status==="done").length;
+  $("complete").textContent=done;$("remaining").textContent=plots.length-done;
+  $("maps").textContent=plots.filter(p=>p.map).length;
+}
+function render(){
+  const q=$("search").value.trim().toLocaleLowerCase("th"),pr=$("province").value,st=$("status").value,pl=$("planting").value,hm=$("hasmap").value;
+  const subset=plots.filter(p=>(!q||(p.id+" "+p.province).toLocaleLowerCase("th").includes(q))&&(!pr||p.province===pr)&&(!st||current(p.id).status===st)&&(!pl||current(p.id).planting===pl)&&(!hm||(hm==="yes"?Boolean(p.map):!p.map)));
+  $("results").textContent="แสดง "+subset.length+" จาก "+plots.length+" แปลง";
+  const area=$("cards"),fragment=document.createDocumentFragment();
+  subset.forEach(p=>fragment.append(renderCard(p)));
+  area.replaceChildren(fragment);
+  if(!subset.length)area.append(el("p","empty","ไม่พบแปลงตามตัวกรอง ลองเปลี่ยนตัวเลือก"));
+  updateStats();
+}
+[...new Set(plots.map(p=>p.province))].sort((a,b)=>a.localeCompare(b,"th")).forEach(p=>option($("province"),p,p));
+["search","province","status","planting","hasmap"].forEach(id=>$(id).addEventListener(id==="search"?"input":"change",render));
+$("export").addEventListener("click",()=>{
+  const backup={format:"ken-plot-checklist-v1",exportedAt:new Date().toISOString(),data:Object.fromEntries(plots.map(p=>[p.id,current(p.id)]))};
+  const blob=new Blob([JSON.stringify(backup,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");
+  a.href=url;a.download="ken-plot-checklist-"+new Date().toISOString().slice(0,10)+".json";a.click();setTimeout(()=>URL.revokeObjectURL(url),2000);
+});
+$("import").addEventListener("click",()=>$("importfile").click());
+$("importfile").addEventListener("change",async e=>{
+  const file=e.target.files?.[0];if(!file)return;
+  try{
+    const raw=JSON.parse(await file.text());if(raw.format!=="ken-plot-checklist-v1"||!raw.data||typeof raw.data!=="object")throw Error("รูปแบบไฟล์ไม่ตรงกับ Checklist");
+    if(!confirm("นำเข้าข้อมูลสำรองจะเขียนทับสถานะที่มีในเครื่องนี้ ยืนยันหรือไม่?"))return;
+    const validIds=new Set(plots.map(p=>p.id));
+    for(const [id,v] of Object.entries(raw.data)){if(validIds.has(id)&&v&&typeof v==="object")saved[id]={status:states[v.status]?v.status:"todo",planting:plants[v.planting]?v.planting:"unknown",note:typeof v.note==="string"?v.note.slice(0,5000):""};}
+    persist();render();alert("นำเข้าข้อมูลแล้ว");
+  }catch(err){alert("ไม่สามารถนำเข้าไฟล์ได้: "+err.message);}
+  finally{e.target.value="";}
+});
+render();
+</script>
+</body>
+</html>
